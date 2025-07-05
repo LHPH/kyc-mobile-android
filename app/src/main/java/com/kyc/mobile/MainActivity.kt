@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.kyc.mobile.ui.screens.login.LoginScreen
 import com.kyc.mobile.ui.theme.KycMobileAndroidTheme
+import com.kyc.mobile.ui.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                     ){
-                    LoginScreen()
+                    LoginScreen(LoginViewModel())
                 }
             }
         }
