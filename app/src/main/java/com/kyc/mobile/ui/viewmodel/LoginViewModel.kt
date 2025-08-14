@@ -3,9 +3,18 @@ package com.kyc.mobile.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.delay
+import androidx.lifecycle.viewModelScope
+import com.kyc.mobile.domain.model.UserCredentials
+import com.kyc.mobile.domain.usecase.LoginRepository
+import com.kyc.mobile.ui.screens.login.LoginState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+): ViewModel() {
 
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
@@ -19,29 +28,62 @@ class LoginViewModel: ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _errorUsername = MutableLiveData<Boolean>()
+    val errorUsername : LiveData<Boolean> = _errorUsername
 
-    fun onLoginChanged(username: String, password: String){
+    private val _errorPassword = MutableLiveData<Boolean>()
+    val errorPassword : LiveData<Boolean> = _errorPassword
+
+    private val _successfulLogin = MutableLiveData<Boolean>()
+    val successfulLogin : LiveData<Boolean> = _successfulLogin;
+
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
+    val loginState: StateFlow<LoginState> = _loginState
+
+
+    fun onUsernameChanged(username: String){
 
         _username.value = username
-        _password.value = password
+        _errorUsername.value = !isValidUsername(username)
 
-        _isLoginEnabled.value = isValidUsername(username) && isValidPassword(password)
+        _isLoginEnabled.value = _errorUsername.value == false && _errorPassword.value == false
     }
 
-    suspend fun onLoginSelected(){
+    fun onPasswordChanged(password: String){
 
-        _isLoading.value = true
-        delay(3000)
-        _isLoading.value = false
+        _password.value = password
+        _errorPassword.value = !isValidPassword(password)
+
+        _isLoginEnabled.value = _errorUsername.value == false && _errorPassword.value == false
     }
 
     private fun isValidUsername(username: String): Boolean{
 
-        return true;
+        val pattern = Regex("^[a-zA-Z0-9_]{6,10}$")
+        return pattern.matches(username)
     }
 
     private fun isValidPassword(password: String): Boolean{
 
-        return true
+        val pattern = Regex("^[a-zA-Z0-9_#\\.\\+\\*\\$]{8,15}\$")
+        return pattern.matches(password);
+    }
+
+    fun login(){
+
+        val username = _username.value
+        val password = _password.value
+
+        if(_isLoginEnabled.value == true && username!=null && password!=null){
+
+            _loginState.value = LoginState.Loading
+            viewModelScope.launch(Dispatchers.IO) {
+
+                var credentials = UserCredentials(username,password)
+                loginRepository.login(credentials);
+                _loginState.value = LoginState.Success
+                //_loginState.value = LoginState.Error("Invalid credentials")
+            }
+        }
     }
 }
