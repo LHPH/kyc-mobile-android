@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.model.UserCredentials
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.ui.screens.login.LoginState
@@ -25,21 +26,14 @@ class LoginViewModel(
     private val _isLoginEnabled = MutableLiveData<Boolean>()
     val isLoginEnabled: LiveData<Boolean> = _isLoginEnabled
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
     private val _errorUsername = MutableLiveData<Boolean>()
     val errorUsername : LiveData<Boolean> = _errorUsername
 
     private val _errorPassword = MutableLiveData<Boolean>()
     val errorPassword : LiveData<Boolean> = _errorPassword
 
-    private val _successfulLogin = MutableLiveData<Boolean>()
-    val successfulLogin : LiveData<Boolean> = _successfulLogin;
-
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
-
 
     fun onUsernameChanged(username: String){
 
@@ -79,11 +73,19 @@ class LoginViewModel(
             _loginState.value = LoginState.Loading
             viewModelScope.launch(Dispatchers.IO) {
 
-                var credentials = UserCredentials(username,password)
-                loginRepository.login(credentials);
-                _loginState.value = LoginState.Success
-                //_loginState.value = LoginState.Error("Invalid credentials")
+                try{
+                    var credentials = UserCredentials(username,password)
+                    loginRepository.login(credentials)
+                    _loginState.value = LoginState.Success
+                }
+                catch(ex: KycMobileException){
+                    _loginState.value = LoginState.Error(ex.errorData!!)
+                }
             }
         }
+    }
+
+    fun resetToIdleState(){
+       _loginState.value = LoginState.Idle
     }
 }

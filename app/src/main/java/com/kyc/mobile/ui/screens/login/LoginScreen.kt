@@ -1,6 +1,5 @@
 package com.kyc.mobile.ui.screens.login
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kyc.mobile.R
+import com.kyc.mobile.ui.shared.KycAlertDialog
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 
 @Composable
@@ -56,10 +56,8 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
     val username: String by viewModel.username.observeAsState("")
     val password: String by viewModel.password.observeAsState("")
     val loginEnabled: Boolean by viewModel.isLoginEnabled.observeAsState(false);
-    val isLoading: Boolean by viewModel.isLoading.observeAsState(false);
     val errorUsername: Boolean by viewModel.errorUsername.observeAsState(false);
     val errorPassword: Boolean by viewModel.errorPassword.observeAsState(false);
-    val successfulLogin: Boolean by viewModel.successfulLogin.observeAsState(false);
     val loginState: LoginState by viewModel.loginState.collectAsState();
     val context = LocalContext.current;
 
@@ -72,9 +70,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
                 HeaderImage(Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.padding(16.dp))
                 UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
-                //Spacer(modifier = Modifier.padding(2.dp))
                 PasswordField(modifier = modifier,password,errorPassword, {viewModel.onPasswordChanged(it)})
-                //Spacer(modifier = Modifier.padding(16.dp))
                 LoginButton(loginEnabled){
                     viewModel.login()
                 }
@@ -89,8 +85,18 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
             navigatingToHome()
         }
         is LoginState.Error -> {
-            Toast.makeText(context, (loginState as LoginState.Error).message,Toast.LENGTH_SHORT)
-                .show()
+
+            val error: LoginState.Error = loginState as LoginState.Error
+            KycAlertDialog(messageData = error.messageData, dismissDialog = {viewModel.resetToIdleState()})
+            Column(modifier = modifier){
+                HeaderImage(Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.padding(16.dp))
+                UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
+                PasswordField(modifier = modifier,password,errorPassword, {viewModel.onPasswordChanged(it)})
+                LoginButton(loginEnabled){
+                    viewModel.login()
+                }
+            }
         }
     }
 }

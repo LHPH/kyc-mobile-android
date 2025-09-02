@@ -20,7 +20,7 @@ class AppModuleImpl(
 
     override val authApi: AuthApi by lazy{
         Retrofit.Builder()
-            .baseUrl("http://test.com")
+            .baseUrl("http://192.168.100.61:10000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()
