@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kyc.mobile.R
 import com.kyc.mobile.ui.shared.KycAlertDialog
@@ -59,6 +61,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
     val errorUsername: Boolean by viewModel.errorUsername.observeAsState(false);
     val errorPassword: Boolean by viewModel.errorPassword.observeAsState(false);
     val loginState: LoginState by viewModel.loginState.collectAsState();
+    val showPassword: Boolean by viewModel.showPassword.observeAsState(false);
     val context = LocalContext.current;
 
     val coroutineScope = rememberCoroutineScope();
@@ -70,7 +73,8 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
                 HeaderImage(Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.padding(16.dp))
                 UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
-                PasswordField(modifier = modifier,password,errorPassword, {viewModel.onPasswordChanged(it)})
+                PasswordField(modifier = modifier,password,errorPassword,showPassword,
+                    {viewModel.onPasswordChanged(it)}, {viewModel.showPasswordOnScreen(it)})
                 LoginButton(loginEnabled){
                     viewModel.login()
                 }
@@ -92,7 +96,8 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
                 HeaderImage(Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.padding(16.dp))
                 UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
-                PasswordField(modifier = modifier,password,errorPassword, {viewModel.onPasswordChanged(it)})
+                PasswordField(modifier = modifier,password,errorPassword,showPassword,
+                    {viewModel.onPasswordChanged(it)},{viewModel.showPasswordOnScreen(it)})
                 LoginButton(loginEnabled){
                     viewModel.login()
                 }
@@ -137,7 +142,9 @@ fun UserField(modifier: Modifier, username: String,errorUsername: Boolean,
 
 @Composable
 fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
-                  onTextFieldChanged: (String) -> Unit){
+                  showPassword: Boolean,
+                  onTextFieldChanged: (String) -> Unit,
+                  onDisplayPassword: (Boolean)-> Unit){
     OutlinedTextField(value = password,
         onValueChange = {onTextFieldChanged(it)},
         isError = errorPassword,
@@ -147,10 +154,13 @@ fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
             imageVector = Icons.Filled.Lock,
             contentDescription = null
         )},
-        trailingIcon = { Icon(
-            imageVector = Icons.Default.Info,
-            contentDescription = null
-        )},
+        trailingIcon = {
+            IconButton(onClick = {onDisplayPassword(showPassword)}) {
+            Icon(
+                imageVector = if (showPassword) Icons.Default.Info else Icons.Default.Info,
+                contentDescription = null,
+            )
+        }},
         label = {
             Text(
                 text = if(errorPassword) "The password is invalid" else "Password",
@@ -163,7 +173,7 @@ fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        visualTransformation = PasswordVisualTransformation(),
+        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
     )
 }
 

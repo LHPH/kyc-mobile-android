@@ -63,6 +63,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+	implementation(libs.okhttp3)
+	implementation(libs.datastore.preferences)
+	implementation(libs.datastore.core)
+	implementation(libs.protobuf)
 
     testImplementation(libs.junit)
 

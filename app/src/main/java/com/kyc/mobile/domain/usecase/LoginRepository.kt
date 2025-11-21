@@ -5,4 +5,6 @@ import com.kyc.mobile.domain.model.UserCredentials
 interface LoginRepository {
 
     suspend fun login(credentials: UserCredentials)
+
+    suspend fun logout()
 }

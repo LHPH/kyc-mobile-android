@@ -31,13 +31,13 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "New Update Available",
+                        text = messageData.type,
                         style = MaterialTheme.typography.titleSmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp),
                     )
                     Text(
-                        text = "This is an example of the description of a very beautiful dialog which you may like.",
+                        text = messageData.message,
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),

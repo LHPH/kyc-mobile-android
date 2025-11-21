@@ -35,6 +35,9 @@ class LoginViewModel(
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
+    private val _showPassword = MutableLiveData<Boolean>();
+    val showPassword: LiveData<Boolean> = _showPassword;
+
     fun onUsernameChanged(username: String){
 
         _username.value = username
@@ -87,5 +90,9 @@ class LoginViewModel(
 
     fun resetToIdleState(){
        _loginState.value = LoginState.Idle
+    }
+
+    fun showPasswordOnScreen(showPassword: Boolean){
+        _showPassword.value = !showPassword
     }
 }
