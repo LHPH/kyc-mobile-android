@@ -39,6 +39,11 @@ android {
         compose = true
         viewBinding = true
     }
+    packaging {
+        resources{
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
+    }
 }
 
 dependencies {
@@ -64,6 +69,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
 	implementation(libs.okhttp3)
+    implementation(libs.okhttp3.interceptor)
 	implementation(libs.datastore.preferences)
 	implementation(libs.datastore.core)
 	implementation(libs.protobuf)

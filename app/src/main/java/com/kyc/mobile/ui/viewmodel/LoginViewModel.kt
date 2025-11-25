@@ -79,6 +79,7 @@ class LoginViewModel(
                 try{
                     var credentials = UserCredentials(username,password)
                     loginRepository.login(credentials)
+                    loginRepository.sessionChecking()
                     _loginState.value = LoginState.Success
                 }
                 catch(ex: KycMobileException){

@@ -17,7 +17,7 @@ fun NavigationFlow(){
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Home){
+    NavHost(navController = navController, startDestination = Login){
 
 
         composable<Login>{
@@ -37,7 +37,10 @@ fun NavigationFlow(){
 
             val homeViewModel = viewModel<HomeViewModel>(
                 factory = viewModelFactory {
-                    HomeViewModel(KycMobileAndroidApplication.appModule.loginRepository)
+                    HomeViewModel(
+                        KycMobileAndroidApplication.appModule.loginRepository,
+                        KycMobileAndroidApplication.appModule.dataStoreRepository
+                    )
                 }
             )
 
