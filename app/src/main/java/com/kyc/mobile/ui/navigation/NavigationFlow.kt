@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kyc.mobile.KycMobileAndroidApplication
 import com.kyc.mobile.ui.screens.home.HomeScreen
+import com.kyc.mobile.ui.screens.intro.IntroScreen
 import com.kyc.mobile.ui.screens.login.LoginScreen
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
@@ -17,8 +18,14 @@ fun NavigationFlow(){
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Login){
+    NavHost(navController = navController, startDestination = Intro){
 
+        composable<Intro>{
+
+            IntroScreen(){
+                navController.navigate(Login)
+            }
+        }
 
         composable<Login>{
 

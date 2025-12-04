@@ -12,12 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -101,12 +99,16 @@ fun HomeScreen(
                         )
                 ) {
                     LazyColumn(
-                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 150.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 30.dp),
+                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 20.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         items(5) {
-                            ListItem(
+                            ServiceCardSection()
+                            /*ListItem(
                                 headlineContent = {
                                     Text(text = "Servicio")
                                 },
@@ -116,7 +118,7 @@ fun HomeScreen(
                                         contentDescription = null
                                     )
                                 }
-                            )
+                            )*/
                         }
                     }
                 }

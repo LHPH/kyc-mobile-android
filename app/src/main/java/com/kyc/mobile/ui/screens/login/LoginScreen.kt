@@ -1,6 +1,7 @@
 package com.kyc.mobile.ui.screens.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,8 +30,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,8 +46,15 @@ import com.kyc.mobile.ui.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
 
+    val localFocusManager = LocalFocusManager.current
+
     Box(modifier = Modifier
         .fillMaxSize()
+        .pointerInput(Unit){
+            detectTapGestures(onTap={
+                localFocusManager.clearFocus()
+            })
+        }
         .paint(painter = painterResource(R.drawable.kyc_background),
             contentScale = ContentScale.FillBounds)
     ){
@@ -57,12 +67,13 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () ->
 
     val username: String by viewModel.username.observeAsState("")
     val password: String by viewModel.password.observeAsState("")
-    val loginEnabled: Boolean by viewModel.isLoginEnabled.observeAsState(false);
-    val errorUsername: Boolean by viewModel.errorUsername.observeAsState(false);
-    val errorPassword: Boolean by viewModel.errorPassword.observeAsState(false);
-    val loginState: LoginState by viewModel.loginState.collectAsState();
-    val showPassword: Boolean by viewModel.showPassword.observeAsState(false);
+    val loginEnabled: Boolean by viewModel.isLoginEnabled.observeAsState(false)
+    val errorUsername: Boolean by viewModel.errorUsername.observeAsState(false)
+    val errorPassword: Boolean by viewModel.errorPassword.observeAsState(false)
+    val loginState: LoginState by viewModel.loginState.collectAsState()
+    val showPassword: Boolean by viewModel.showPassword.observeAsState(false)
     val context = LocalContext.current;
+
 
     val coroutineScope = rememberCoroutineScope();
 
