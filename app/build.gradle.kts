@@ -1,3 +1,6 @@
+import com.kyc.mobile.buildsrc.AppConfig
+import com.kyc.mobile.buildsrc.readYamlConfig
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -26,6 +29,25 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val config: AppConfig = readYamlConfig(project,"config/prod.yaml")
+            for(property in config.appConfig){
+                val value = if (property.type != "String") property.value else "\"${property.value}\""
+                buildConfigField(property.type, property.key,value)
+            }
+        }
+        debug{
+            val config: AppConfig = readYamlConfig(project,"config/dev.yaml")
+            for(property in config.appConfig){
+                val value = if (property.type != "String") property.value else "\"${property.value}\""
+                buildConfigField(property.type, property.key,value)
+            }
+            //buildConfigField(config.appConfig.baseUrl.type,)
+            /*val properties = loadProperties("config/dev.properties")
+            for((key,value) in properties){
+                if (key is String && value is String) {
+                    buildConfigField("String", key, "\"$value\"")
+                }
+            }*/
         }
     }
     compileOptions {
@@ -38,6 +60,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        buildConfig = true
     }
     packaging {
         resources{
@@ -69,6 +92,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(libs.retrofit.kotlin)
 	implementation(libs.okhttp3)
     implementation(libs.okhttp3.interceptor)
 	implementation(libs.datastore.preferences)

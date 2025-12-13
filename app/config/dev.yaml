@@ -1,0 +1,13 @@
+app-config:
+  - key: "BASE_URL"
+    value: "http://192.168.100.61:10000"
+    type: "String"
+  - key: "ENVIRONMENT"
+    value: "DEV"
+    type: "String"
+  - key: "NUMBER"
+    value: "2"
+    type: "int"
+  - key: "LOG_ENABLED"
+    value: "true"
+    type: "boolean"
