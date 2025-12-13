@@ -1,6 +1,6 @@
 package com.kyc.mobile.domain.exception
 
-import com.kyc.mobile.domain.model.MessageData
+import com.kyc.mobile.data.remote.dto.MessageData
 
 data class KycMobileException(
     val errorData: MessageData?,

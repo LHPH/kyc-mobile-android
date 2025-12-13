@@ -1,5 +1,8 @@
-package com.kyc.mobile.domain.model
+package com.kyc.mobile.data.remote.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MessageData(
     val code: String = "KYC-MOBILE-000",
     val message: String = "Unexpected Error",

@@ -46,6 +46,7 @@ fun NavigationFlow(){
                 factory = viewModelFactory {
                     HomeViewModel(
                         KycMobileAndroidApplication.appModule.loginRepository,
+                        KycMobileAndroidApplication.appModule.customerApplicationRepository,
                         KycMobileAndroidApplication.appModule.dataStoreRepository
                     )
                 }

@@ -1,10 +1,10 @@
-package com.kyc.mobile.data.remote
+package com.kyc.mobile.data.remote.api
 
 import com.kyc.mobile.data.annotation.TokenAuth
-import com.kyc.mobile.domain.model.ResponseData
-import com.kyc.mobile.domain.model.SessionData
-import com.kyc.mobile.domain.model.TokenData
-import com.kyc.mobile.domain.model.UserCredentials
+import com.kyc.mobile.data.remote.dto.ResponseData
+import com.kyc.mobile.data.remote.dto.SessionData
+import com.kyc.mobile.data.remote.dto.TokenData
+import com.kyc.mobile.data.remote.dto.UserCredentials
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

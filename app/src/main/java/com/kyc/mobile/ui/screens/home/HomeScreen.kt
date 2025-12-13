@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
+import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,11 +42,6 @@ fun HomeScreen(
 ) {
 
     val homeState by viewModel.homeState.collectAsStateWithLifecycle()
-    val nameCustomer by viewModel.nameCustomer.collectAsStateWithLifecycle("")
-
-    LaunchedEffect(Unit) {
-        viewModel.getUserPreferences()
-    }
 
     Scaffold (
         topBar = {
@@ -58,7 +53,7 @@ fun HomeScreen(
                             contentDescription = null
                         )
                     },
-                title = {Text(text = "Welcome $nameCustomer")},
+                title = {Text(text = "Welcome ${homeState.customerName}")},
                 actions = {
                     AppBarScrollContent(viewModel)
                 },
@@ -88,8 +83,9 @@ fun HomeScreen(
             }
         }){ paddingValues ->
 
-        when(homeState){
-            HomeState.Idle -> {
+        when(homeState.state){
+            DisplayState.Idle,
+            DisplayState.Success -> {
                 Box(
                     modifier = Modifier.padding(paddingValues)
                         .fillMaxSize()
@@ -106,7 +102,7 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        items(5) {
+                        items(homeState.services.size) {
                             ServiceCardSection()
                             /*ListItem(
                                 headlineContent = {
@@ -123,17 +119,17 @@ fun HomeScreen(
                     }
                 }
             }
-            HomeState.Exit -> {
+            DisplayState.Exit -> {
                 navigateToLogin()
             }
-            HomeState.Loading -> {
+            DisplayState.Loading -> {
                 Box(modifier = Modifier.padding(paddingValues)
                     .fillMaxSize()){
-                    CircularProgressIndicator(Modifier.align(Alignment.Center));
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
             }
-            is HomeState.Error ->{
-                val error: HomeState.Error = homeState as HomeState.Error
+            is DisplayState.Error ->{
+                val error: DisplayState.Error = homeState as DisplayState.Error
             }
         }
 

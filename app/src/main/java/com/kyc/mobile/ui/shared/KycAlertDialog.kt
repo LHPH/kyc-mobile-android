@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.kyc.mobile.domain.model.MessageData
+import com.kyc.mobile.data.remote.dto.MessageData
 
 @Composable
 fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){

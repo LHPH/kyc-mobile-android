@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kyc.mobile.domain.exception.KycMobileException
-import com.kyc.mobile.domain.model.UserCredentials
+import com.kyc.mobile.data.remote.dto.UserCredentials
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.ui.screens.login.LoginState
 import kotlinx.coroutines.Dispatchers

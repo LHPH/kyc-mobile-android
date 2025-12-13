@@ -1,17 +1,18 @@
-package com.kyc.mobile.data.repository
+package com.kyc.mobile.data.remote
 
 import android.util.Log
-import com.kyc.mobile.data.remote.AuthApi
+import com.kyc.mobile.data.remote.api.AuthApi
+import com.kyc.mobile.data.remote.dto.MessageData
+import com.kyc.mobile.data.remote.dto.ResponseData
+import com.kyc.mobile.data.remote.dto.SessionData
+import com.kyc.mobile.data.remote.dto.TokenData
+import com.kyc.mobile.data.remote.dto.UserCredentials
+import com.kyc.mobile.data.util.ApiUtil
+import com.kyc.mobile.data.util.processResponseData
 import com.kyc.mobile.domain.exception.KycMobileException
-import com.kyc.mobile.domain.model.MessageData
-import com.kyc.mobile.domain.model.ResponseData
-import com.kyc.mobile.domain.model.SessionData
-import com.kyc.mobile.domain.model.TokenData
-import com.kyc.mobile.domain.model.UserCredentials
 import com.kyc.mobile.domain.model.UserPreferences
 import com.kyc.mobile.domain.usecase.DataStoreRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
-import com.kyc.mobile.domain.util.GeneralUtil
 import retrofit2.Response
 
 class LoginRepositoryImpl(
@@ -25,7 +26,22 @@ class LoginRepositoryImpl(
             Log.i("Login", "Authenticate User "+credentials)
             var response: Response<ResponseData<TokenData>> = authApi.login(credentials)
 
-            var payload: String?
+            val result: ResponseData<TokenData>  = response.processResponseData()
+            val error = ApiUtil.checkIfError(result)
+
+            if(!error){
+                Log.i("Login", "Successful")
+                val token = result.data?.token!!
+                dataStoreRepository.saveToDataStore(UserPreferences(token = token))
+            }
+            else{
+                val kycException = KycMobileException(result.error, exception = null)
+                Log.e("Login", "Error $kycException")
+                throw kycException
+            }
+
+
+            /*var payload: String?
             if(response.isSuccessful){
                 Log.i("Login", "Successful")
                 payload = response.body()?.data?.token!!
@@ -48,7 +64,7 @@ class LoginRepositoryImpl(
                 }
 
                 throw kycException
-            }
+            }*/
         }
         catch(ex: KycMobileException){
             throw ex
@@ -75,7 +91,26 @@ class LoginRepositoryImpl(
 
         try{
             val response: Response<ResponseData<SessionData>> = authApi.sessionChecking()
-            if(response.isSuccessful){
+            val result: ResponseData<SessionData>  = response.processResponseData()
+            val error = ApiUtil.checkIfError(result)
+
+            if(!error){
+                val sessionData = result.data!!
+                dataStoreRepository.saveToDataStore(UserPreferences(
+                    userId = sessionData.user,
+                    customerId = sessionData.owner,
+                    role = sessionData.role,
+                    name = sessionData.name!!
+                ))
+                return sessionData
+            }
+            else{
+                val kycException = KycMobileException(result.error, exception = null)
+                Log.e("Login", "Error $kycException")
+                throw kycException
+            }
+
+            /*if(response.isSuccessful){
 
                 val sessionData = response.body()?.data!!
                 dataStoreRepository.saveToDataStore(UserPreferences(
@@ -89,7 +124,7 @@ class LoginRepositoryImpl(
             else{
                 var errorData = MessageData(message = "Unexpected error in session",time = "")
                 throw KycMobileException(errorData, exception = null)
-            }
+            }*/
 
         }
         catch(ex: KycMobileException){

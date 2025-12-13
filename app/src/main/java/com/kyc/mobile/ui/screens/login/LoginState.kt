@@ -1,6 +1,6 @@
 package com.kyc.mobile.ui.screens.login
 
-import com.kyc.mobile.domain.model.MessageData
+import com.kyc.mobile.data.remote.dto.MessageData
 
 sealed class LoginState{
 

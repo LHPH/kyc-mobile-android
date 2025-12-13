@@ -1,9 +1,12 @@
-package com.kyc.mobile.domain.model
+package com.kyc.mobile.data.remote.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SessionData(
     val owner: Long,
     val user: Long,
-    val name: String?,
+    val name: String? = "TEST",
     val channel: String,
     val role: String,
     val sub: String,
@@ -12,6 +15,7 @@ data class SessionData(
     val headers: SessionHeadersData
 )
 
+@Serializable
 data class SessionHeadersData(
     val alg: String
 )
