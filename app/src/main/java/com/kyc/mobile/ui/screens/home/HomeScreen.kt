@@ -104,17 +104,6 @@ fun HomeScreen(
                     ) {
                         items(homeState.services.size) {
                             ServiceCardSection()
-                            /*ListItem(
-                                headlineContent = {
-                                    Text(text = "Servicio")
-                                },
-                                leadingContent = {
-                                    Icon(
-                                        imageVector = Icons.Filled.Star,
-                                        contentDescription = null
-                                    )
-                                }
-                            )*/
                         }
                     }
                 }

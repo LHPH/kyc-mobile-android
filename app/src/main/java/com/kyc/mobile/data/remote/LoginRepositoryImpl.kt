@@ -39,32 +39,6 @@ class LoginRepositoryImpl(
                 Log.e("Login", "Error $kycException")
                 throw kycException
             }
-
-
-            /*var payload: String?
-            if(response.isSuccessful){
-                Log.i("Login", "Successful")
-                payload = response.body()?.data?.token!!
-                Log.i("Login", "Payload "+payload)
-                dataStoreRepository.saveToDataStore(UserPreferences(token = payload))
-            }
-            else{
-                Log.i("Login", "Error")
-                payload = response.errorBody()?.string()
-                Log.w("Login", "Payload "+payload)
-
-                var kycException: KycMobileException
-                if(!GeneralUtil.isNullOrEmpty(payload)){
-                    var errorResponse: ResponseData<String> = GeneralUtil.toResponseData(payload, String::class.java)
-                    kycException = KycMobileException(errorResponse.error, exception = null)
-                }
-                else{
-                    var errorData = MessageData(message = "Unexpected error in login",time = "")
-                    kycException = KycMobileException(errorData, exception = null)
-                }
-
-                throw kycException
-            }*/
         }
         catch(ex: KycMobileException){
             throw ex
@@ -109,23 +83,6 @@ class LoginRepositoryImpl(
                 Log.e("Login", "Error $kycException")
                 throw kycException
             }
-
-            /*if(response.isSuccessful){
-
-                val sessionData = response.body()?.data!!
-                dataStoreRepository.saveToDataStore(UserPreferences(
-                    userId = sessionData.user,
-                    customerId = sessionData.owner,
-                    role = sessionData.role,
-                    name = sessionData.name ?: "TEST"
-                ))
-                return sessionData
-            }
-            else{
-                var errorData = MessageData(message = "Unexpected error in session",time = "")
-                throw KycMobileException(errorData, exception = null)
-            }*/
-
         }
         catch(ex: KycMobileException){
             throw ex
