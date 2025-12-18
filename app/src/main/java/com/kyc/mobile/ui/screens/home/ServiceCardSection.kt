@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,9 +61,35 @@ fun ServiceCardSection(onClick: ()-> Unit = {}){
             text = "Service 1",
             color = Color.White,
             fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .align(alignment = Alignment.CenterStart)
-                .padding(start = 16.dp, bottom = 16.dp)
+                .align(alignment = Alignment.Center)
+                .padding(bottom = 16.dp)
+        )
+        Text(
+            text = "$1500/month",
+            color = Color.White,
+            fontSize = 15.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier
+                .align(alignment = Alignment.Center)
+                .padding(top = 40.dp)
+        )
+        Text(
+            text = "10/10/2020",
+            color = Color.White,
+            fontSize = 15.sp,
+            modifier = Modifier
+                .align(alignment = Alignment.BottomStart)
+                .padding(start = 16.dp, bottom = 10.dp)
+        )
+        Text(
+            text = "Folio: 1214131",
+            color = Color.White,
+            fontSize = 15.sp,
+            modifier = Modifier
+                .align(alignment = Alignment.BottomEnd)
+                .padding(end = 18.dp, bottom = 10.dp)
         )
     }
 }
