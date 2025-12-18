@@ -10,3 +10,9 @@ object Login
 
 @Serializable
 object Home
+
+@Serializable
+object Notifications
+
+@Serializable
+object Offers
