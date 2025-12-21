@@ -22,6 +22,7 @@ okhttp3 = "5.3.1"
 datastore = "1.1.7"
 protobuf = "4.33.1"
 jackson = "2.20.0"
+passay = "1.6.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +61,7 @@ protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.
 jackson-dataformat-yml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "jackson"}
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson"}
 jackson-module-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson"}
+passay = { group = "org.passay", name = "passay", version.ref = "passay"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -22,31 +22,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
+import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.shared.KycAlertDialog
+import com.kyc.mobile.ui.shared.ObserveAsEvents
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
 
     val localFocusManager = LocalFocusManager.current
+    val loginState: LoginState by viewModel.loginState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -58,61 +58,53 @@ fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
         .paint(painter = painterResource(R.drawable.kyc_background),
             contentScale = ContentScale.FillBounds)
     ){
-        Login(Modifier.align(Alignment.Center),viewModel,navigatingToHome)
+
+        ObserveAsEvents(viewModel.events){ event ->
+            when(event){
+                is LoginEvent.onError ->{
+
+                }
+            }
+        }
+
+        when(loginState.state) {
+            DisplayState.Idle -> {
+                Login(Modifier.align(Alignment.Center), loginState, viewModel)
+            }
+            DisplayState.Loading -> {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+                /*Box(modifier = Modifier.fillMaxSize()) {
+
+                }*/
+            }
+            DisplayState.Success -> {
+                navigatingToHome()
+            }
+            DisplayState.Exit -> {}
+            is DisplayState.Error -> {
+
+                val error = (loginState.state as DisplayState.Error).messageData
+                KycAlertDialog(
+                    messageData = error,
+                    dismissDialog = {
+                        viewModel.onAction(LoginAction.ResetStateToIdle)
+                    })
+                Login(Modifier.align(Alignment.Center), loginState, viewModel)
+            }
+        }
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel, navigatingToHome: () -> Unit){
+fun Login(modifier: Modifier, loginState: LoginState, viewModel: LoginViewModel){
 
-    val username: String by viewModel.username.observeAsState("")
-    val password: String by viewModel.password.observeAsState("")
-    val loginEnabled: Boolean by viewModel.isLoginEnabled.observeAsState(false)
-    val errorUsername: Boolean by viewModel.errorUsername.observeAsState(false)
-    val errorPassword: Boolean by viewModel.errorPassword.observeAsState(false)
-    val loginState: LoginState by viewModel.loginState.collectAsState()
-    val showPassword: Boolean by viewModel.showPassword.observeAsState(false)
-    val context = LocalContext.current;
-
-
-    val coroutineScope = rememberCoroutineScope();
-
-    when(loginState){
-        LoginState.Idle -> {
-
-            Column(modifier = modifier){
-                HeaderImage(Modifier.align(Alignment.CenterHorizontally))
-                Spacer(modifier = Modifier.padding(16.dp))
-                UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
-                PasswordField(modifier = modifier,password,errorPassword,showPassword,
-                    {viewModel.onPasswordChanged(it)}, {viewModel.showPasswordOnScreen(it)})
-                LoginButton(loginEnabled){
-                    viewModel.login()
-                }
-            }
-        }
-        LoginState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize()){
-                CircularProgressIndicator(Modifier.align(Alignment.Center));
-            }
-        }
-        LoginState.Success -> {
-            navigatingToHome()
-        }
-        is LoginState.Error -> {
-
-            val error: LoginState.Error = loginState as LoginState.Error
-            KycAlertDialog(messageData = error.messageData, dismissDialog = {viewModel.resetToIdleState()})
-            Column(modifier = modifier){
-                HeaderImage(Modifier.align(Alignment.CenterHorizontally))
-                Spacer(modifier = Modifier.padding(16.dp))
-                UserField(modifier = modifier,username,errorUsername, {viewModel.onUsernameChanged(it)})
-                PasswordField(modifier = modifier,password,errorPassword,showPassword,
-                    {viewModel.onPasswordChanged(it)},{viewModel.showPasswordOnScreen(it)})
-                LoginButton(loginEnabled){
-                    viewModel.login()
-                }
-            }
+    Column(modifier = modifier){
+        HeaderImage(Modifier.align(Alignment.CenterHorizontally))
+        Spacer(modifier = Modifier.padding(16.dp))
+        UserField(modifier = modifier,loginState, viewModel)
+        PasswordField(modifier = modifier,loginState,viewModel)
+        LoginButton(loginState.loginEnabled){
+            viewModel.onAction(LoginAction.OnClickLogin)
         }
     }
 }
@@ -124,12 +116,12 @@ fun HeaderImage(modifier: Modifier){
 }
 
 @Composable
-fun UserField(modifier: Modifier, username: String,errorUsername: Boolean,
-              onTextFieldChanged: (String) -> Unit){
+fun UserField(modifier: Modifier, loginState: LoginState,
+              viewModel: LoginViewModel){
 
-    OutlinedTextField(value = username,
-        onValueChange = {onTextFieldChanged(it)},
-        isError = errorUsername,
+    OutlinedTextField(value = loginState.username.value,
+        onValueChange = {viewModel.onAction(LoginAction.OnUsernameChanged(it))},
+        isError = loginState.username.error,
         modifier = Modifier.fillMaxWidth()
             .padding(15.dp),
         leadingIcon = { Icon(
@@ -138,8 +130,8 @@ fun UserField(modifier: Modifier, username: String,errorUsername: Boolean,
         )},
         label = {
             Text(
-                text = if (errorUsername) "The username is invalid" else "Username",
-                color = if(errorUsername) Color.Red else Color.Black
+                text = if (loginState.username.error) "The username is invalid" else "Username",
+                color = if(loginState.username.error) Color.Red else Color.Black
                 )
         },
         placeholder = {
@@ -152,13 +144,11 @@ fun UserField(modifier: Modifier, username: String,errorUsername: Boolean,
 }
 
 @Composable
-fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
-                  showPassword: Boolean,
-                  onTextFieldChanged: (String) -> Unit,
-                  onDisplayPassword: (Boolean)-> Unit){
-    OutlinedTextField(value = password,
-        onValueChange = {onTextFieldChanged(it)},
-        isError = errorPassword,
+fun PasswordField(modifier: Modifier, loginState: LoginState,
+                  viewModel: LoginViewModel){
+    OutlinedTextField(value = loginState.password.value,
+        onValueChange = {viewModel.onAction(LoginAction.OnPasswordChanged(it))},
+        isError = loginState.password.error,
         modifier = Modifier.fillMaxWidth()
             .padding(15.dp),
         leadingIcon = { Icon(
@@ -166,16 +156,16 @@ fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
             contentDescription = null
         )},
         trailingIcon = {
-            IconButton(onClick = {onDisplayPassword(showPassword)}) {
+            IconButton(onClick = {viewModel.onAction(LoginAction.ShowPassword(loginState.showPassword))}) {
             Icon(
-                imageVector = if (showPassword) Icons.Default.Info else Icons.Default.Info,
+                imageVector = if (loginState.showPassword) Icons.Default.Info else Icons.Default.Info,
                 contentDescription = null,
             )
         }},
         label = {
             Text(
-                text = if(errorPassword) "The password is invalid" else "Password",
-                color = if(errorPassword) Color.Red else Color.Black
+                text = if(loginState.password.error) "The password is invalid" else "Password",
+                color = if(loginState.password.error) Color.Red else Color.Black
             )
         },
         placeholder = {
@@ -184,7 +174,7 @@ fun PasswordField(modifier: Modifier, password: String, errorPassword: Boolean,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (loginState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
     )
 }
 

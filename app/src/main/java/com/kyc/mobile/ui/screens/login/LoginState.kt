@@ -1,11 +1,16 @@
 package com.kyc.mobile.ui.screens.login
 
-import com.kyc.mobile.data.remote.dto.MessageData
+import com.kyc.mobile.ui.shared.DisplayState
 
-sealed class LoginState{
+data class LoginState(
+    val username: LoginInput = LoginInput(),
+    val password: LoginInput = LoginInput(),
+    val loginEnabled: Boolean = false,
+    val showPassword: Boolean = false,
+    val state: DisplayState = DisplayState.Idle
+)
 
-    object Idle: LoginState()
-    object Loading: LoginState()
-    object Success: LoginState()
-    data class Error(val messageData: MessageData): LoginState()
-}
+data class LoginInput(
+    val value: String = "",
+    val error: Boolean = false
+)

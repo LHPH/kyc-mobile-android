@@ -1,99 +1,96 @@
 package com.kyc.mobile.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.data.remote.dto.UserCredentials
+import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.usecase.LoginRepository
+import com.kyc.mobile.domain.util.CredentialsUtil
+import com.kyc.mobile.ui.screens.login.LoginAction
+import com.kyc.mobile.ui.screens.login.LoginEvent
+import com.kyc.mobile.ui.screens.login.LoginInput
 import com.kyc.mobile.ui.screens.login.LoginState
+import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+const val LOGIN_TAG = "Login"
 
 class LoginViewModel(
     private val loginRepository: LoginRepository
 ): ViewModel() {
 
-    private val _username = MutableLiveData<String>()
-    val username: LiveData<String> = _username
-
-    private val _password = MutableLiveData<String>()
-    val password: LiveData<String> = _password
-
-    private val _isLoginEnabled = MutableLiveData<Boolean>()
-    val isLoginEnabled: LiveData<Boolean> = _isLoginEnabled
-
-    private val _errorUsername = MutableLiveData<Boolean>()
-    val errorUsername : LiveData<Boolean> = _errorUsername
-
-    private val _errorPassword = MutableLiveData<Boolean>()
-    val errorPassword : LiveData<Boolean> = _errorPassword
-
-    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
+    private val _loginState = MutableStateFlow<LoginState>(LoginState())
     val loginState: StateFlow<LoginState> = _loginState
 
-    private val _showPassword = MutableLiveData<Boolean>();
-    val showPassword: LiveData<Boolean> = _showPassword;
+    private val eventChannel = Channel<LoginEvent>()
+    val events = eventChannel.receiveAsFlow()
 
-    fun onUsernameChanged(username: String){
-
-        _username.value = username
-        _errorUsername.value = !isValidUsername(username)
-
-        _isLoginEnabled.value = _errorUsername.value == false && _errorPassword.value == false
-    }
-
-    fun onPasswordChanged(password: String){
-
-        _password.value = password
-        _errorPassword.value = !isValidPassword(password)
-
-        _isLoginEnabled.value = _errorUsername.value == false && _errorPassword.value == false
-    }
-
-    private fun isValidUsername(username: String): Boolean{
-
-        val pattern = Regex("^[a-zA-Z0-9_]{6,10}$")
-        return pattern.matches(username)
-    }
-
-    private fun isValidPassword(password: String): Boolean{
-
-        val pattern = Regex("^[a-zA-Z0-9_#\\.\\+\\*\\$]{8,15}\$")
-        return pattern.matches(password);
-    }
-
-    fun login(){
-
-        val username = _username.value
-        val password = _password.value
-
-        if(_isLoginEnabled.value == true && username!=null && password!=null){
-
-            _loginState.value = LoginState.Loading
-            viewModelScope.launch(Dispatchers.IO) {
-
-                try{
-                    var credentials = UserCredentials(username,password)
-                    loginRepository.login(credentials)
-                    loginRepository.sessionChecking()
-                    _loginState.value = LoginState.Success
+    fun onAction(action: LoginAction){
+        when(action){
+            is LoginAction.OnUsernameChanged ->{
+                _loginState.update {
+                    var error = CredentialsUtil.isValidUsername(action.value)
+                    var loginEnabled = !error && !it.password.error
+                    it.copy(loginEnabled = loginEnabled, username = LoginInput(action.value,error))
                 }
-                catch(ex: KycMobileException){
-                    _loginState.value = LoginState.Error(ex.errorData!!)
+            }
+            is LoginAction.OnPasswordChanged ->{
+                _loginState.update{
+                    var error = CredentialsUtil.isValidPassword(action.value)
+                    var loginEnabled = !error && !it.username.error
+                    it.copy(loginEnabled = loginEnabled, password = LoginInput(action.value,error))
+                }
+            }
+            is LoginAction.ShowPassword -> {
+                _loginState.update { it.copy(showPassword = !action.value) }
+            }
+            is LoginAction.OnClickLogin->{
+                login()
+            }
+            is LoginAction.ResetStateToIdle ->{
+                _loginState.update {
+                    it.copy(state = DisplayState.Idle)
                 }
             }
         }
     }
 
-    fun resetToIdleState(){
-       _loginState.value = LoginState.Idle
-    }
+    fun login(){
 
-    fun showPasswordOnScreen(showPassword: Boolean){
-        _showPassword.value = !showPassword
+        Log.i(LOGIN_TAG, "Starting Login process")
+        _loginState.update{
+            it.copy(state = DisplayState.Loading)
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try{
+                var credentials = UserCredentials(_loginState.value.username.value,
+                    _loginState.value.password.value)
+
+                Log.i(LOGIN_TAG, "Login user")
+                loginRepository.login(credentials)
+
+                Log.i(LOGIN_TAG, "Check session")
+                loginRepository.sessionChecking()
+
+                Log.i(LOGIN_TAG, "Update view")
+                _loginState.update{
+                    it.copy(state = DisplayState.Success)
+                }
+            }
+            catch(ex: KycMobileException){
+                Log.e(LOGIN_TAG, "Error in login",ex)
+                _loginState.update{
+                    it.copy(state = DisplayState.Error(ex.errorData!!))
+                }
+            }
+        }
     }
 }

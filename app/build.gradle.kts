@@ -98,6 +98,7 @@ dependencies {
 	implementation(libs.datastore.preferences)
 	implementation(libs.datastore.core)
 	implementation(libs.protobuf)
+    implementation(libs.passay)
 
     testImplementation(libs.junit)
 
