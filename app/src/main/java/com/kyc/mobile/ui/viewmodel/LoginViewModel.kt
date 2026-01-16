@@ -36,15 +36,17 @@ class LoginViewModel(
         when(action){
             is LoginAction.OnUsernameChanged ->{
                 _loginState.update {
-                    var error = CredentialsUtil.isValidUsername(action.value)
-                    var loginEnabled = !error && !it.password.error
+                    var error = !CredentialsUtil.isValidUsername(action.value)
+                    var errorPassword = !CredentialsUtil.isValidPassword(it.password.value)
+                    var loginEnabled = !error && !errorPassword
                     it.copy(loginEnabled = loginEnabled, username = LoginInput(action.value,error))
                 }
             }
             is LoginAction.OnPasswordChanged ->{
                 _loginState.update{
-                    var error = CredentialsUtil.isValidPassword(action.value)
-                    var loginEnabled = !error && !it.username.error
+                    var error = !CredentialsUtil.isValidPassword(action.value)
+                    var errorUsername = !CredentialsUtil.isValidUsername(it.username.value)
+                    var loginEnabled = !error && !errorUsername
                     it.copy(loginEnabled = loginEnabled, password = LoginInput(action.value,error))
                 }
             }

@@ -35,7 +35,7 @@ fun IntroScreen(
     ) {
         val (image, btn, title) = createRefs()
         Image(
-            painter = painterResource(id = R.drawable.intro_pic),
+            painter = painterResource(id = R.drawable.intro_kyc),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier

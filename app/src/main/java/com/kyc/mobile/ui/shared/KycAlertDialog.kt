@@ -3,10 +3,13 @@ package com.kyc.mobile.ui.shared
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -14,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.kyc.mobile.R
 import com.kyc.mobile.data.remote.dto.MessageData
 
 @Composable
@@ -30,12 +35,22 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = messageData.type,
-                        style = MaterialTheme.typography.titleSmall,
-                        textAlign = TextAlign.Center,
+                    Row(
                         modifier = Modifier.padding(16.dp),
-                    )
+                        horizontalArrangement = Arrangement.spacedBy(space = 5.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.report_24px),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                        Text(
+                            text = messageData.type,
+                            style = MaterialTheme.typography.titleSmall,
+                            textAlign = TextAlign.Center,
+                            //modifier = Modifier.padding(16.dp),
+                        )
+                    }
                     Text(
                         text = messageData.message,
                         style = MaterialTheme.typography.bodySmall,
@@ -45,9 +60,17 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                     TextButton(
                         onClick = { dismissDialog() },
                         modifier = Modifier.padding(5.dp),
-                        border = BorderStroke(1.dp,MaterialTheme.colorScheme.primary)
+                        border = BorderStroke(1.dp,MaterialTheme.colorScheme.primary),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        shape = MaterialTheme.shapes.medium
                     ) {
-                        Text(style = MaterialTheme.typography.bodySmall, text = "Accept")
+                        Text(
+                            style = MaterialTheme.typography.bodySmall,
+                            text = "Accept",
+                            color = MaterialTheme.colorScheme.onPrimary
+                            )
                     }
                     Text(
                         text = messageData.code,

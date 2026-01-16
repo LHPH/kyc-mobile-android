@@ -1,5 +1,6 @@
 package com.kyc.mobile.ui.screens.login
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -11,15 +12,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,9 +36,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
+import com.kyc.mobile.data.mock.MockLoginRepository
 import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.shared.KycAlertDialog
 import com.kyc.mobile.ui.shared.ObserveAsEvents
@@ -55,8 +59,9 @@ fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
                 localFocusManager.clearFocus()
             })
         }
-        .paint(painter = painterResource(R.drawable.kyc_background),
-            contentScale = ContentScale.FillBounds)
+        .paint(painter = painterResource(id = R.drawable.intro_kyc),
+            contentScale = ContentScale.Crop)
+
     ){
 
         ObserveAsEvents(viewModel.events){ event ->
@@ -98,9 +103,9 @@ fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
 @Composable
 fun Login(modifier: Modifier, loginState: LoginState, viewModel: LoginViewModel){
 
-    Column(modifier = modifier){
+    Column(modifier = modifier.padding(bottom = 80.dp)){
         HeaderImage(Modifier.align(Alignment.CenterHorizontally))
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(5.dp))
         UserField(modifier = modifier,loginState, viewModel)
         PasswordField(modifier = modifier,loginState,viewModel)
         LoginButton(loginState.loginEnabled){
@@ -111,7 +116,7 @@ fun Login(modifier: Modifier, loginState: LoginState, viewModel: LoginViewModel)
 
 @Composable
 fun HeaderImage(modifier: Modifier){
-    Image(painter = painterResource(id = R.drawable.icon_account_circle_200),
+    Image(painter = painterResource(id = R.drawable.id_card),
         contentDescription = "Header", modifier = modifier)
 }
 
@@ -126,17 +131,28 @@ fun UserField(modifier: Modifier, loginState: LoginState,
             .padding(15.dp),
         leadingIcon = { Icon(
             imageVector = Icons.Filled.Person,
-            contentDescription = null
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimary
         )},
         label = {
             Text(
                 text = if (loginState.username.error) "The username is invalid" else "Username",
-                color = if(loginState.username.error) Color.Red else Color.Black
+                color = if(loginState.username.error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimary
                 )
         },
         placeholder = {
-            Text(text = "Username")
+            Text(
+                text = "Username",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            errorTextColor = MaterialTheme.colorScheme.error,
+            focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary
+        ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
         singleLine = true,
         maxLines = 1,
@@ -146,6 +162,14 @@ fun UserField(modifier: Modifier, loginState: LoginState,
 @Composable
 fun PasswordField(modifier: Modifier, loginState: LoginState,
                   viewModel: LoginViewModel){
+
+    val painterVisibilityIcon = if(loginState.showPassword){
+        painterResource(R.drawable.visibility_24px)
+    }
+    else{
+        painterResource(R.drawable.visibility_lock_24px)
+    }
+
     OutlinedTextField(value = loginState.password.value,
         onValueChange = {viewModel.onAction(LoginAction.OnPasswordChanged(it))},
         isError = loginState.password.error,
@@ -153,27 +177,39 @@ fun PasswordField(modifier: Modifier, loginState: LoginState,
             .padding(15.dp),
         leadingIcon = { Icon(
             imageVector = Icons.Filled.Lock,
-            contentDescription = null
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimary
         )},
         trailingIcon = {
             IconButton(onClick = {viewModel.onAction(LoginAction.ShowPassword(loginState.showPassword))}) {
             Icon(
-                imageVector = if (loginState.showPassword) Icons.Default.Info else Icons.Default.Info,
+                painter = painterVisibilityIcon,
                 contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }},
         label = {
             Text(
                 text = if(loginState.password.error) "The password is invalid" else "Password",
-                color = if(loginState.password.error) Color.Red else Color.Black
+                color = if(loginState.password.error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimary
             )
         },
         placeholder = {
-            Text(text = "Password")
+            Text(
+                text = "Password",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            errorTextColor = MaterialTheme.colorScheme.error,
+            focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary
+        ),
         visualTransformation = if (loginState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
     )
 }
@@ -183,12 +219,28 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit){
 
     Button(onClick = {onLoginSelected()},
         enabled =  loginEnable,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            disabledContainerColor = Color.Gray
+        ),
         modifier = Modifier
         .fillMaxWidth()
         .padding(15.dp)
         .height(48.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-        Text(text = "Sign In")
+        Text(
+            text = "Sign In",
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
+}
+
+
+@Preview
+@Composable
+@SuppressLint("ViewModelConstructorInComposable")
+fun LoginScreenPreview(){
+    var viewModel = LoginViewModel(loginRepository = MockLoginRepository())
+    LoginScreen(viewModel = viewModel, navigatingToHome = {})
 }

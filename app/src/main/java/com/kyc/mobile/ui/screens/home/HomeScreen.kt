@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.rounded.Home
@@ -77,7 +76,10 @@ fun HomeScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = { },
-                    icon = { Icon(Icons.Filled.Favorite, null) },
+                    icon = { Icon(
+                        painter = painterResource(R.drawable.paid_24px),
+                        contentDescription = ""
+                    ) },
                     label = { Text(text = "Payments") }
                 )
             }
@@ -90,8 +92,8 @@ fun HomeScreen(
                     modifier = Modifier.padding(paddingValues)
                         .fillMaxSize()
                         .paint(
-                            painter = painterResource(R.drawable.kyc_background),
-                            contentScale = ContentScale.FillBounds
+                            painter = painterResource(id = R.drawable.intro_kyc),
+                            contentScale = ContentScale.Crop
                         )
                 ) {
                     LazyColumn(
@@ -102,8 +104,8 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        items(homeState.services.size) {
-                            ServiceCardSection()
+                        items(homeState.services.size) { item ->
+                            ServiceCardSection(homeState.services[item])
                         }
                     }
                 }
