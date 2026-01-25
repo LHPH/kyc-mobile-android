@@ -34,7 +34,7 @@ class CustomerApplicationRepositoryImpl(
                         acceptPromotions = it.promotions.acceptPromotions,
                         acceptPromotionsEmail = it.promotions.acceptPromotionsEmail,
                         acceptPromotionsCellPhone = it.promotions.acceptPromotionsCellPhone,
-                        creationDate = it.modificationDate ?: ""
+                        creationDate = it.creationDate
                     )
                 }.collect(Collectors.toList())
 

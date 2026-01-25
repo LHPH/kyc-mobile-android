@@ -15,7 +15,7 @@ data class ContractedServiceResp(
     val office: String,
     val active: Boolean,
     val promotions: ContractedServicePromotion,
-    val creationDate: String?,
+    val creationDate: String,
     val modificationDate: String?
 )
 

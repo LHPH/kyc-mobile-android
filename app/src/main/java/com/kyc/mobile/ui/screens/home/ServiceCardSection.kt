@@ -27,6 +27,7 @@ import com.kyc.mobile.domain.model.CustomerContractService
 import com.kyc.mobile.domain.util.DateUtil
 import com.kyc.mobile.domain.util.GeneralUtil
 import com.kyc.mobile.ui.theme.algerianFontFamily
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ServiceCardSection(
@@ -87,7 +88,9 @@ fun ServiceCardSection(
                 .padding(top = 40.dp)
         )
         Text(
-            text = DateUtil.parseDateStringFormat(contractService.creationDate, "", "yyyy-MM-dd"),
+            text = DateUtil.parseLocalDateTimeToStringFormat(contractService.creationDate,
+                DateTimeFormatter.ISO_INSTANT,
+                DateTimeFormatter.ISO_LOCAL_DATE),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             modifier = Modifier
