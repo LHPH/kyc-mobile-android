@@ -89,7 +89,7 @@ fun ServiceCardSection(
         )
         Text(
             text = DateUtil.parseLocalDateTimeToStringFormat(contractService.creationDate,
-                DateTimeFormatter.ISO_INSTANT,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
                 DateTimeFormatter.ISO_LOCAL_DATE),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,

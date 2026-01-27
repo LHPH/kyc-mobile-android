@@ -1,5 +1,6 @@
 package com.kyc.mobile.data.remote.dto
 
+import com.kyc.mobile.domain.model.CustomerAction
 import com.kyc.mobile.domain.util.AppConstants
 import kotlinx.serialization.Serializable
 

@@ -28,7 +28,10 @@ class NetworkModuleImpl(
     private val dataStoreModule: DataStoreModule
 ): NetworkModule{
 
-    val json = Json { ignoreUnknownKeys = true } // Configure Json instance as needed
+    val json = Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+    } // Configure Json instance as needed
     val contentType = "application/json".toMediaType()
 
     override val authApi: AuthApi by lazy{

@@ -31,7 +31,9 @@ fun NavigationFlow(){
 
             val loginViewModel = viewModel<LoginViewModel>(
                 factory = viewModelFactory {
-                    LoginViewModel(KycMobileAndroidApplication.appModule.featureModule.loginRepository)
+                    LoginViewModel(
+                        KycMobileAndroidApplication.appModule.featureModule.loginRepository,
+                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository)
                 }
             )
 
@@ -47,6 +49,7 @@ fun NavigationFlow(){
                     HomeViewModel(
                         KycMobileAndroidApplication.appModule.featureModule.loginRepository,
                         KycMobileAndroidApplication.appModule.featureModule.customerApplicationRepository,
+                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository,
                         KycMobileAndroidApplication.appModule.dataStoreModule.dataStoreRepository
                     )
                 }

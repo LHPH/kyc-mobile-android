@@ -6,9 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kyc.mobile.domain.exception.KycMobileException
+import com.kyc.mobile.domain.model.CustomerAction
 import com.kyc.mobile.domain.usecase.CustomerApplicationRepository
+import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.DataStoreRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
+import com.kyc.mobile.domain.util.TrackIdEnum
 import com.kyc.mobile.ui.screens.home.HomeState
 import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +26,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val loginRepository: LoginRepository,
     private val customerApplicationRepository: CustomerApplicationRepository,
+    private val customerTrackActionRepository: CustomerTrackActionRepository,
     private val dataStoreRepository: DataStoreRepository
 ): ViewModel() {
 
@@ -66,6 +70,17 @@ class HomeViewModel(
         viewModelScope.launch(Dispatchers.IO) {
 
             try{
+
+                val params = HashMap<String,String>()
+                params["category"] = "Auth"
+                params["event"] = "Logout"
+
+                val userPreferences = dataStoreRepository.getUserPreferencesFromDataStore()
+                val customerAction = CustomerAction(customerNumber = userPreferences.customerId,
+                    trackId = TrackIdEnum.HOME.id.toString(),params)
+
+                customerTrackActionRepository.registerAction(customerAction)
+
                 loginRepository.logout()
                 Log.i("Home", "Logout")
                 _homeState.update {

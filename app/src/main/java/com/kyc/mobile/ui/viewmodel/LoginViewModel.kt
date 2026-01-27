@@ -3,10 +3,14 @@ package com.kyc.mobile.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kyc.mobile.data.remote.dto.SessionData
 import com.kyc.mobile.data.remote.dto.UserCredentials
 import com.kyc.mobile.domain.exception.KycMobileException
+import com.kyc.mobile.domain.model.CustomerAction
+import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.domain.util.CredentialsUtil
+import com.kyc.mobile.domain.util.TrackIdEnum
 import com.kyc.mobile.ui.screens.login.LoginAction
 import com.kyc.mobile.ui.screens.login.LoginEvent
 import com.kyc.mobile.ui.screens.login.LoginInput
@@ -23,7 +27,8 @@ import kotlinx.coroutines.launch
 const val LOGIN_TAG = "Login"
 
 class LoginViewModel(
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val customerTrackActionRepository: CustomerTrackActionRepository,
 ): ViewModel() {
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState())
@@ -80,7 +85,8 @@ class LoginViewModel(
                 loginRepository.login(credentials)
 
                 Log.i(LOGIN_TAG, "Check session")
-                loginRepository.sessionChecking()
+                val sessionData = loginRepository.sessionChecking()
+                registerAction(sessionData)
 
                 Log.i(LOGIN_TAG, "Update view")
                 _loginState.update{
@@ -94,5 +100,20 @@ class LoginViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun registerAction(sessionData: SessionData){
+
+        val params = HashMap<String,String>()
+        params["ip"] = "127.0.0.2"
+        params["longitude"] = "123456789"
+        params["latitude"] = "987654321"
+        params["category"] = "Auth"
+        params["event"] = "Login"
+
+        val action = CustomerAction(customerNumber = sessionData.owner,
+            trackId = TrackIdEnum.LOGIN.id.toString(), params )
+
+        customerTrackActionRepository.registerAction(action)
     }
 }

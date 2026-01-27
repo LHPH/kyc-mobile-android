@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
+import com.kyc.mobile.data.mock.MockCustomerTrackActionRepository
 import com.kyc.mobile.data.mock.MockLoginRepository
 import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.shared.KycAlertDialog
@@ -241,6 +242,8 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit){
 @Composable
 @SuppressLint("ViewModelConstructorInComposable")
 fun LoginScreenPreview(){
-    var viewModel = LoginViewModel(loginRepository = MockLoginRepository())
+    var viewModel = LoginViewModel(
+        loginRepository = MockLoginRepository(),
+        customerTrackActionRepository = MockCustomerTrackActionRepository())
     LoginScreen(viewModel = viewModel, navigatingToHome = {})
 }
