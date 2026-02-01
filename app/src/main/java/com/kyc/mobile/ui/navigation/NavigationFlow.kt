@@ -61,5 +61,9 @@ fun NavigationFlow(){
                     navController.navigate(Login)
                 })
         }
+
+        composable<Notifications>{
+
+        }
     }
 }

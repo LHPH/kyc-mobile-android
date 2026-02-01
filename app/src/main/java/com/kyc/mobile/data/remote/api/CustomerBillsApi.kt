@@ -1,0 +1,17 @@
+package com.kyc.mobile.data.remote.api
+
+import com.kyc.mobile.data.annotation.TokenAuth
+import com.kyc.mobile.data.remote.dto.CustomerBillsResp
+import com.kyc.mobile.data.remote.dto.ResponseData
+import com.kyc.mobile.domain.util.AppConstants
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Headers
+
+interface CustomerBillsApi {
+
+    @TokenAuth
+    @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
+    @GET("/gateway/api/bills/")
+    suspend fun getCustomerBills(): Response<ResponseData<List<CustomerBillsResp>>>
+}
