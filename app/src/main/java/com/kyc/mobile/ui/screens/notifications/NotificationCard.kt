@@ -15,17 +15,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyc.mobile.R
+import com.kyc.mobile.domain.model.CustomerNotification
+import com.kyc.mobile.domain.util.NotificationEventEnum
 import com.kyc.mobile.ui.theme.algerianFontFamily
 
-@Preview(showBackground = false)
+
 @Composable
-fun NotificationCard(){
+fun NotificationCard(notification: CustomerNotification){
+
+    val event = runCatching { enumValueOf<NotificationEventEnum>(notification.event) }
+        .getOrDefault(NotificationEventEnum.WARN)
+    val painterIconEvent: Painter = when(event){
+        NotificationEventEnum.INFO ->{
+            painterResource(id = R.drawable.info_24px)
+        }
+        NotificationEventEnum.WARN->{
+            painterResource(id = R.drawable.warning_24px)
+        }
+        NotificationEventEnum.ERROR->{
+            painterResource(id = R.drawable.error_24px)
+        }
+    }
 
     OutlinedCard(
         colors = CardDefaults.cardColors(
@@ -43,7 +60,7 @@ fun NotificationCard(){
                 .align(alignment = Alignment.CenterHorizontally)
         ){
             Icon(
-                painter = painterResource(id = R.drawable.info_24px),
+                painter = painterIconEvent,
                 contentDescription = "",
                 tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
@@ -51,7 +68,7 @@ fun NotificationCard(){
                     .padding(start = 5.dp, top = 5.dp)
             )
             Text(
-                text = "Welcome to KYC",
+                text = notification.message,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontFamily = algerianFontFamily,
                 fontSize = 13.sp,
@@ -61,7 +78,7 @@ fun NotificationCard(){
                     .padding(start = 10.dp, top = 35.dp)
             )
             Text(
-                text = "2026-10-10",
+                text = notification.date,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontFamily = algerianFontFamily,
                 fontSize = 11.sp,
@@ -72,4 +89,10 @@ fun NotificationCard(){
             )
         }
     }
+}
+
+@Composable
+@Preview(showBackground = false)
+fun NotificationCardPreview(){
+    NotificationCard(CustomerNotification(message = "Welcome to KYC", event = "INFO", date = "2029-10-10"))
 }

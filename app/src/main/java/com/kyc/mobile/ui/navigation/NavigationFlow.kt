@@ -9,8 +9,10 @@ import com.kyc.mobile.KycMobileAndroidApplication
 import com.kyc.mobile.ui.screens.home.HomeScreen
 import com.kyc.mobile.ui.screens.intro.IntroScreen
 import com.kyc.mobile.ui.screens.login.LoginScreen
+import com.kyc.mobile.ui.screens.notifications.NotificationsScreen
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
+import com.kyc.mobile.ui.viewmodel.NotificationsViewModel
 import com.kyc.mobile.ui.viewmodel.viewModelFactory
 
 @Composable
@@ -23,7 +25,7 @@ fun NavigationFlow(){
         composable<Intro>{
 
             IntroScreen(){
-                navController.navigate(Login)
+                navController.navigate(Notifications)
             }
         }
 
@@ -64,6 +66,18 @@ fun NavigationFlow(){
 
         composable<Notifications>{
 
+            val notificationViewModel= viewModel<NotificationsViewModel>(
+                factory = viewModelFactory {
+                    NotificationsViewModel()
+                }
+            )
+
+            NotificationsScreen(
+                notificationsViewModel = notificationViewModel,
+                onClickBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
