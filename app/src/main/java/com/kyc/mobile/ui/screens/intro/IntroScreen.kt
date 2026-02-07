@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.kyc.mobile.R
+import com.kyc.mobile.ui.theme.algerianFontFamily
 
 @Composable
 @Preview
@@ -49,8 +51,9 @@ fun IntroScreen(
         )
         Text(
             text = "Your APP to manage your operations with KYC",
+            fontFamily = algerianFontFamily,
             color = Color.White,
-            fontSize = 28.sp,
+            fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.constrainAs(title) {
                 bottom.linkTo(btn.bottom, margin = 58.dp)
@@ -79,10 +82,12 @@ fun IntroScreen(
         ){
             Text(
                 text = "Gets Started",
+                fontFamily = algerianFontFamily,
                 color = Color.White,
-                fontSize = 20.sp,
+                fontSize = 19.sp,
                 fontWeight = FontWeight.Normal,
-                lineHeight = 22.sp
+                lineHeight = 22.sp,
+                modifier = Modifier.padding(start = 18.dp)
             )
         }
     }

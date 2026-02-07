@@ -20,10 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.kyc.mobile.R
 import com.kyc.mobile.data.remote.dto.MessageData
+import com.kyc.mobile.ui.theme.algerianFontFamily
 
 @Composable
 fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
@@ -46,7 +48,9 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                         )
                         Text(
                             text = messageData.type,
+                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleSmall,
+                            fontFamily = algerianFontFamily,
                             textAlign = TextAlign.Center,
                             //modifier = Modifier.padding(16.dp),
                         )
@@ -54,6 +58,8 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                     Text(
                         text = messageData.message,
                         style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = algerianFontFamily,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),
                     )
@@ -69,6 +75,8 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                         Text(
                             style = MaterialTheme.typography.bodySmall,
                             text = "Accept",
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = algerianFontFamily,
                             color = MaterialTheme.colorScheme.onPrimary
                             )
                     }
@@ -76,10 +84,17 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
                         text = messageData.code,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = algerianFontFamily,
                         color = Color.Gray,
                         modifier = Modifier.padding(5.dp)
                     )
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun KycAlertDialogPreview(){
+    KycAlertDialog(messageData = MessageData(time= ""), dismissDialog = {})
 }
