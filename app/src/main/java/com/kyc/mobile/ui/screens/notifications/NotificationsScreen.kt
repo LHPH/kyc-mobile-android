@@ -47,13 +47,15 @@ fun NotificationsScreen(
 ){
 
     val notificationsState: NotificationsState by notificationsViewModel.notificationsState.collectAsStateWithLifecycle()
-    NotificationView(notificationsState, onClickBack)
+    NotificationView(notificationsState, onClickBack,notificationsViewModel::onAction)
 }
 
 @Composable
 fun NotificationView(
     notificationState: NotificationsState,
-    onClickBack: () -> Unit={}){
+    onClickBack: () -> Unit={},
+    onAction: (action: NotificationAction) -> Unit = {}
+){
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -110,7 +112,7 @@ fun NotificationView(
                     ) {
                         items(sizeNotifications) { item ->
 
-                            NotificationCard(notificationState.notifications.get(item))
+                            NotificationCard(notificationState.notifications[item])
                         }
                     }
                 }
@@ -152,7 +154,7 @@ fun NotificationView(
                 val error = notificationState.state.messageData
                 KycAlertDialog(
                     messageData = error,
-                    dismissDialog = {})
+                    dismissDialog = {onAction(NotificationAction.OnDismissAlertError)})
             }
         }
     }

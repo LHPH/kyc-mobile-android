@@ -1,8 +1,12 @@
 package com.kyc.mobile.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.model.CustomerNotification
+import com.kyc.mobile.domain.usecase.CustomerNotificationRepository
+import com.kyc.mobile.ui.screens.notifications.NotificationAction
 import com.kyc.mobile.ui.screens.notifications.NotificationsState
 import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
@@ -15,15 +19,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class NotificationsViewModel(
+const val NOTIFICATION_TAG = "NOTIFICATIONS"
 
+class NotificationsViewModel(
+    private val customerNotificationRepository: CustomerNotificationRepository
 ): ViewModel(){
 
     private val _notificationsState = MutableStateFlow<NotificationsState>(NotificationsState())
 
     val notificationsState: StateFlow<NotificationsState> = _notificationsState
         .onStart {
-            loadData()
+            onAction(NotificationAction.OnLoad)
         }
         .stateIn(
             viewModelScope,
@@ -35,23 +41,40 @@ class NotificationsViewModel(
 
         viewModelScope.launch(Dispatchers.IO){
 
-           // val userPreferences = dataStoreRepository.getUserPreferencesFromDataStore()
-            //val services = customerApplicationRepository.getCustomerContractServices()
+            try {
+                delay(2000)
+                val notifications: List<CustomerNotification> = customerNotificationRepository.getNotifications()
 
-            delay(2000)
-            val notifications: ArrayList<CustomerNotification> = ArrayList()
+                _notificationsState.update{
+                    it.copy(
+                        notifications = notifications,
+                        state = DisplayState.Success
+                    )
+                }
+            }
+            catch(ex: KycMobileException){
 
-            notifications.add(CustomerNotification(message = "Welcome to KYC", event = "INFO", date = "2029-10-10"))
-            notifications.add(CustomerNotification(message = "Welcome to KYC", event = "INFO", date = "2029-10-10"))
-            notifications.add(CustomerNotification(message = "Welcome to KYC", event = "ERROR", date = "2029-10-10"))
-            notifications.add(CustomerNotification(message = "Welcome to KYC", event = "WARN", date = "2029-10-10"))
-            notifications.add(CustomerNotification(message = "Welcome to KYC", event = "ERROR", date = "2029-10-10"))
+                Log.e(NOTIFICATION_TAG, "Error in Notifications",ex)
+                _notificationsState.update{
+                    it.copy(state = DisplayState.Error(ex.errorData!!))
+                }
+            }
+        }
+    }
 
-            _notificationsState.update{
-                it.copy(
-                    notifications = notifications,
-                    state = DisplayState.Success
-                )
+    fun onAction(action: NotificationAction){
+
+        when(action){
+            NotificationAction.OnLoad->{
+                loadData()
+            }
+            NotificationAction.OnDismissAlertError->{
+                _notificationsState.update {
+                    it.copy(
+                        state = DisplayState.Loading
+                    )
+                }
+                loadData()
             }
         }
     }

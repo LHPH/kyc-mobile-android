@@ -68,7 +68,9 @@ fun NavigationFlow(){
 
             val notificationViewModel= viewModel<NotificationsViewModel>(
                 factory = viewModelFactory {
-                    NotificationsViewModel()
+                    NotificationsViewModel(
+                        KycMobileAndroidApplication.appModule.featureModule.customerNotificationRepository
+                    )
                 }
             )
 

@@ -32,6 +32,7 @@ fun NotificationCard(notification: CustomerNotification){
 
     val event = runCatching { enumValueOf<NotificationEventEnum>(notification.event) }
         .getOrDefault(NotificationEventEnum.WARN)
+
     val painterIconEvent: Painter = when(event){
         NotificationEventEnum.INFO ->{
             painterResource(id = R.drawable.info_24px)
@@ -41,6 +42,18 @@ fun NotificationCard(notification: CustomerNotification){
         }
         NotificationEventEnum.ERROR->{
             painterResource(id = R.drawable.error_24px)
+        }
+    }
+
+    val colorIconEvent: Color = when(event) {
+        NotificationEventEnum.INFO ->{
+            MaterialTheme.colorScheme.tertiary
+        }
+        NotificationEventEnum.WARN->{
+            MaterialTheme.colorScheme.inversePrimary
+        }
+        NotificationEventEnum.ERROR->{
+            MaterialTheme.colorScheme.error
         }
     }
 
@@ -62,7 +75,7 @@ fun NotificationCard(notification: CustomerNotification){
             Icon(
                 painter = painterIconEvent,
                 contentDescription = "",
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = colorIconEvent,
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .padding(start = 5.dp, top = 5.dp)
