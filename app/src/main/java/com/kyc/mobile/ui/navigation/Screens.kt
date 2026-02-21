@@ -15,4 +15,10 @@ object Home
 object Notifications
 
 @Serializable
+object Bills
+
+@Serializable
+object BillDetail
+
+@Serializable
 object Offers

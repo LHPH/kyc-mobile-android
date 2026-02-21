@@ -6,10 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kyc.mobile.KycMobileAndroidApplication
+import com.kyc.mobile.ui.screens.bills.BillScreen
 import com.kyc.mobile.ui.screens.home.HomeScreen
 import com.kyc.mobile.ui.screens.intro.IntroScreen
 import com.kyc.mobile.ui.screens.login.LoginScreen
 import com.kyc.mobile.ui.screens.notifications.NotificationsScreen
+import com.kyc.mobile.ui.viewmodel.BillViewModel
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 import com.kyc.mobile.ui.viewmodel.NotificationsViewModel
@@ -80,6 +82,31 @@ fun NavigationFlow(){
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable<Bills>{
+
+            val billViewModel = viewModel<BillViewModel>(
+                factory = viewModelFactory {
+                    BillViewModel(
+
+                    )
+                }
+            )
+
+            BillScreen(
+                viewModel = billViewModel,
+                onClickBack = {
+                    navController.popBackStack()
+                },
+                onClickDetail = {
+                    navController.navigate(BillDetail)
+                }
+            )
+        }
+
+        composable<BillDetail>{
+
         }
     }
 }
