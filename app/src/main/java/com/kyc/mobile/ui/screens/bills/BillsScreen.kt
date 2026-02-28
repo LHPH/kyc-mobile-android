@@ -14,10 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -100,6 +104,41 @@ fun BillView(
             DisplayState.Idle,
             DisplayState.Success -> {
 
+                IconButton(
+                    onClick = {
+                    },
+                    modifier = Modifier.padding(top = 40.dp, start = 20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "Open Menu"
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = false,
+                    onDismissRequest = {}
+                ) {
+                    DropdownMenuItem(
+                        text ={
+                            Text("test")
+                        },
+                        onClick = {}
+                    )
+                    DropdownMenuItem(
+                        text ={
+                            Text("test")
+                        },
+                        onClick = {}
+                    )
+                    DropdownMenuItem(
+                        text ={
+                            Text("test")
+                        },
+                        onClick = {}
+                    )
+                }
+
                 var sizeBills = billState.bills.size
                 if(sizeBills > 0){
 
@@ -107,7 +146,7 @@ fun BillView(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 40.dp),
-                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 20.dp),
+                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 50.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -125,7 +164,7 @@ fun BillView(
                         border = BorderStroke(width = 1.dp, color = Color.White),
                         shape = RoundedCornerShape(size = 16.dp),
                         modifier = Modifier
-                            .padding(start= 50.dp, top=70.dp)
+                            .padding(start= 50.dp, top=85.dp)
                             .size(
                                 width = 300.dp,
                                 height = 100.dp
@@ -170,11 +209,11 @@ fun BillViewPreview(){
         status = "UNPAID", issueDate = "", billingStartDate = "", billingFinishDate = "",
         paymentDueDate =  "", settlementDate = ""
     )
-    customerBills[0]= customerBill
-    customerBills[1]= customerBill
-    customerBills[2]= customerBill
-    customerBills[3]= customerBill
-    customerBills[4]= customerBill
+    customerBills.add(customerBill)
+    customerBills.add(customerBill)
+    customerBills.add(customerBill)
+    customerBills.add(customerBill)
+    customerBills.add(customerBill)
 
     BillView(billState = BillsState(bills = customerBills, state = DisplayState.Idle))
 }
