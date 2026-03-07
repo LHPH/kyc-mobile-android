@@ -20,7 +20,7 @@ import com.kyc.mobile.domain.model.CustomerBill
 @Composable
 fun BillCard(
     bill: CustomerBill,
-    onClickDetail: ()-> Unit = {}){
+    onClickDetail: (bill: CustomerBill)-> Unit = {}){
 
     var painterIconEvent: Painter = painterResource(id = R.drawable.info_24px)
 
@@ -45,7 +45,7 @@ fun BillCard(
         ),
         modifier = Modifier.padding(start = 20.dp, end = 20.dp)
             .clip(RoundedCornerShape(size = 16.dp))
-            .clickable(true, onClick = onClickDetail)
+            .clickable(true, onClick = {onClickDetail(bill)})
 
     )
 }

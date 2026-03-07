@@ -1,5 +1,6 @@
 package com.kyc.mobile.ui.navigation
 
+import com.kyc.mobile.domain.model.CustomerBill
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +19,7 @@ object Notifications
 object Bills
 
 @Serializable
-object BillDetail
+data class BillDetail(val bill: CustomerBill)
 
 @Serializable
 object Offers

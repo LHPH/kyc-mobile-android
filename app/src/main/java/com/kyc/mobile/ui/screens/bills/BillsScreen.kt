@@ -1,12 +1,15 @@
 package com.kyc.mobile.ui.screens.bills
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,7 +53,7 @@ import com.kyc.mobile.ui.viewmodel.BillViewModel
 fun BillScreen(
     viewModel: BillViewModel,
     onClickBack: () -> Unit,
-    onClickDetail: () -> Unit){
+    onClickDetail: (bill: CustomerBill) -> Unit){
 
     val billState by viewModel.billState.collectAsStateWithLifecycle()
     BillView(billState, onClickBack,onClickDetail, viewModel::onAction)
@@ -59,7 +63,7 @@ fun BillScreen(
 fun BillView(
     billState: BillsState,
     onClickBack: ()-> Unit={},
-    onClickDetail:()-> Unit={},
+    onClickDetail:(bill: CustomerBill)-> Unit={},
     onAction: (action: BillAction)-> Unit = {}
 ){
     Box(
@@ -104,54 +108,65 @@ fun BillView(
             DisplayState.Idle,
             DisplayState.Success -> {
 
-                IconButton(
-                    onClick = {
-                    },
-                    modifier = Modifier.padding(top = 40.dp, start = 20.dp)
+                Row(
+                    modifier = Modifier.padding(top = 40.dp,start = 20.dp),
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "Open Menu"
-                    )
+                    IconButton(
+                        onClick = {
+                            onAction(BillAction.OnClickDropdown(true))
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = ""
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = billState.expandedDropdown,
+                        onDismissRequest = {onAction(BillAction.OnClickDropdown(false))},
+                        offset = DpOffset(10.dp, 0.dp)
+                    ) {
+                        DropdownMenuItem(
+                            text ={
+                                Text("All")
+                            },
+                            onClick = { onAction(BillAction.OnClickDropdownItem(""))}
+                        )
+                        DropdownMenuItem(
+                            text ={
+                                Text("Paid")
+                            },
+                            onClick = { onAction(BillAction.OnClickDropdownItem("PAID")) }
+                        )
+                        DropdownMenuItem(
+                            text ={
+                                Text("Valid")
+                            },
+                            onClick = { onAction(BillAction.OnClickDropdownItem("VALID")) }
+                        )
+                        DropdownMenuItem(
+                            text ={
+                                Text("Canceled")
+                            },
+                            onClick = { onAction(BillAction.OnClickDropdownItem("CANCELED")) }
+                        )
+                    }
                 }
 
-                DropdownMenu(
-                    expanded = false,
-                    onDismissRequest = {}
-                ) {
-                    DropdownMenuItem(
-                        text ={
-                            Text("test")
-                        },
-                        onClick = {}
-                    )
-                    DropdownMenuItem(
-                        text ={
-                            Text("test")
-                        },
-                        onClick = {}
-                    )
-                    DropdownMenuItem(
-                        text ={
-                            Text("test")
-                        },
-                        onClick = {}
-                    )
-                }
 
-                var sizeBills = billState.bills.size
+                var sizeBills = billState.displayedBills.size
                 if(sizeBills > 0){
 
                     LazyColumn(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp),
-                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 50.dp),
+                            .padding(top = 70.dp),
+                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 40.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         items(sizeBills) { item ->
-                            BillCard(billState.bills[item],onClickDetail)
+                            val bill: CustomerBill = billState.displayedBills[item]
+                            BillCard(bill,onClickDetail)
                         }
                     }
                 }
@@ -182,7 +197,6 @@ fun BillView(
                             )
                         )
                     }
-
                 }
             }
             DisplayState.Loading -> {
@@ -206,7 +220,7 @@ fun BillViewPreview(){
     var customerBills = ArrayList<CustomerBill>()
     val customerBill = CustomerBill(
         id = 1, taxes = 10.2, subtotal = 20.0,total = 300.0, settled = false,
-        status = "UNPAID", issueDate = "", billingStartDate = "", billingFinishDate = "",
+        status = "PAID", issueDate = "", billingStartDate = "", billingFinishDate = "",
         paymentDueDate =  "", settlementDate = ""
     )
     customerBills.add(customerBill)
@@ -215,5 +229,6 @@ fun BillViewPreview(){
     customerBills.add(customerBill)
     customerBills.add(customerBill)
 
-    BillView(billState = BillsState(bills = customerBills, state = DisplayState.Idle))
+    BillView(billState = BillsState(bills = customerBills, displayedBills = customerBills,
+        state = DisplayState.Idle))
 }

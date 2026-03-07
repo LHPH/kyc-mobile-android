@@ -1,5 +1,8 @@
 package com.kyc.mobile.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CustomerBill(
     val id: Long,
     val taxes: Double,

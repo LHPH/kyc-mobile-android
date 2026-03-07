@@ -5,7 +5,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.kyc.mobile.KycMobileAndroidApplication
+import com.kyc.mobile.domain.model.CustomerBill
+import com.kyc.mobile.ui.screens.bills.BillDetailScreen
 import com.kyc.mobile.ui.screens.bills.BillScreen
 import com.kyc.mobile.ui.screens.home.HomeScreen
 import com.kyc.mobile.ui.screens.intro.IntroScreen
@@ -27,7 +30,7 @@ fun NavigationFlow(){
         composable<Intro>{
 
             IntroScreen(){
-                navController.navigate(Notifications)
+                navController.navigate(Bills)
             }
         }
 
@@ -99,14 +102,20 @@ fun NavigationFlow(){
                 onClickBack = {
                     navController.popBackStack()
                 },
-                onClickDetail = {
-                    navController.navigate(BillDetail)
+                onClickDetail = { bill ->
+                    navController.navigate(BillDetail(bill))
                 }
             )
         }
 
-        composable<BillDetail>{
-
+        composable<BillDetail>{ backStackEntry ->
+            val args: BillDetail = backStackEntry.toRoute<BillDetail>()
+            BillDetailScreen(
+                args.bill,
+                onClickBack = {
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }
