@@ -1,0 +1,20 @@
+{
+	"data": [
+		{
+			"message": "HELLO CUSTOMER 3",
+			"event": "WARN",
+			"date": "2025-02-27T17:47:17.2455861",
+			"issuer": "5",
+			"recipient": "5",
+			"channel": "1"
+		},
+		{
+			"message": "HELLO CUSTOMER 3",
+			"event": "WARN",
+			"date": "2025-02-27T17:47:12.7315",
+			"issuer": "5",
+			"recipient": "5",
+			"channel": "1"
+		}
+	]
+}

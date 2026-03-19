@@ -1,0 +1,18 @@
+{
+	"data": [
+		{
+			"id": 1,
+			"customerNumber": 1,
+			"customerEmail": "dev@test.com",
+			"offerName": "LANZAMIENTO",
+			"offerDescription": "LANZAMIENTO DE LAB",
+			"promotionalCode": "LAB20250501",
+			"discount": 0,
+			"reward": "GRATIS PRODUCTO AMZ",
+			"startDate": "2025-01-17",
+			"finishDate": "2025-03-01",
+			"status": "PUBLISHED",
+			"termAndConditionsLink": "https://www.terminos-y-condiciones/amz/promo/2022-05/info.html"
+		}
+	]
+}

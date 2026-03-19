@@ -1,0 +1,19 @@
+{
+	"data": {
+		"owner": 1,
+		"user": 2,
+		"channel": "3",
+		"role": "CUSTOMER",
+		"sub": "ba48e728-99c2-4b41-a3ac-d97356b159a6",
+		"iss": "http://localhost:9004",
+		"aud": [
+			"http://localhost:9004"
+		],
+		"additions": {
+			"sess-init": 1768693733919
+		},
+		"headers": {
+			"alg": "HS256"
+		}
+	}
+}

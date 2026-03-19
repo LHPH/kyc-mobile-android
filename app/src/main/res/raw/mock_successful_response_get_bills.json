@@ -1,0 +1,17 @@
+{
+	"data": [
+		{
+			"id": 1,
+			"taxes": 16.0,
+			"subtotal": 5000.0,
+			"total": 5600.0,
+			"settled": true,
+			"status": "PAID",
+			"issueDate": "2024-05-18T14:14:09.7744",
+			"billingStartDate": "2024-05-18",
+			"billingFinishDate": "2024-10-10",
+			"paymentDueDate": "2024-10-10",
+			"settlementDate": "2024-05-18T13:42:13.090745"
+		}
+	]
+}
