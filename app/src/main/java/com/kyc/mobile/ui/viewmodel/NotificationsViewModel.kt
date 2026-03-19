@@ -42,7 +42,6 @@ class NotificationsViewModel(
         viewModelScope.launch(Dispatchers.IO){
 
             try {
-                delay(2000)
                 val notifications: List<CustomerNotification> = customerNotificationRepository.getNotifications()
 
                 _notificationsState.update{

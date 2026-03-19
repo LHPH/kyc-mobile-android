@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.model.CustomerBill
+import com.kyc.mobile.domain.usecase.CustomerBillRepository
 import com.kyc.mobile.ui.screens.bills.BillAction
 import com.kyc.mobile.ui.screens.bills.BillsState
 import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,10 +21,10 @@ import kotlinx.coroutines.launch
 const val BILLS_TAG = "BILLS"
 
 class BillViewModel(
-
+    private val customerBillsRepository: CustomerBillRepository
 ): ViewModel(){
 
-    val _billState = MutableStateFlow(BillsState())
+    private val _billState = MutableStateFlow(BillsState())
     val billState: StateFlow<BillsState> = _billState
         .onStart {
             loadData()
@@ -40,18 +40,7 @@ class BillViewModel(
         viewModelScope.launch(Dispatchers.IO){
 
             try {
-                delay(2000)
-                var customerBills = ArrayList<CustomerBill>()
-                val customerBill = CustomerBill(
-                    id = 1, taxes = 10.2, subtotal = 20.0,total = 300.0, settled = false,
-                    status = "PAID", issueDate = "", billingStartDate = "", billingFinishDate = "",
-                    paymentDueDate =  "", settlementDate = ""
-                )
-                customerBills.add(customerBill.copy(status = "VALID"))
-                customerBills.add(customerBill)
-                customerBills.add(customerBill)
-                customerBills.add(customerBill.copy(status = "EXPIRED"))
-                customerBills.add(customerBill)
+                val customerBills = customerBillsRepository.getCustomerBills()
 
                 _billState.update {
                     it.copy(bills =  customerBills, displayedBills = customerBills, state = DisplayState.Success)

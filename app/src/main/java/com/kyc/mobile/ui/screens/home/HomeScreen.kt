@@ -37,7 +37,10 @@ import com.kyc.mobile.ui.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navigateToLogin: ()-> Unit
+    navigateToLogin: ()-> Unit = {},
+    navigateToBills: ()->Unit = {},
+    navigateToNotifications: () -> Unit = {},
+    navigateToPayments: () -> Unit = {}
 ) {
 
     val homeState by viewModel.homeState.collectAsStateWithLifecycle()
@@ -63,19 +66,19 @@ fun HomeScreen(
             NavigationBar() {
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = navigateToBills,
                     icon = { Icon(Icons.Filled.Info, null) },
                     label = { Text(text = "Bills") }
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = navigateToNotifications,
                     icon = { Icon(Icons.Filled.Notifications, null) },
                     label = { Text(text = "Notifications") }
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = navigateToPayments,
                     icon = { Icon(
                         painter = painterResource(R.drawable.paid_24px),
                         contentDescription = ""

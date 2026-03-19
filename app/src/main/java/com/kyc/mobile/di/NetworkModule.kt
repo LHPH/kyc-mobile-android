@@ -3,6 +3,7 @@ package com.kyc.mobile.di
 import com.kyc.mobile.BuildConfig
 import com.kyc.mobile.data.remote.api.AuthApi
 import com.kyc.mobile.data.remote.api.CustomerApplicationApi
+import com.kyc.mobile.data.remote.api.CustomerBillsApi
 import com.kyc.mobile.data.remote.api.CustomerTrackActionApi
 import com.kyc.mobile.data.remote.api.NotificationsApi
 import com.kyc.mobile.data.remote.api.OfferApi
@@ -22,6 +23,7 @@ interface NetworkModule {
     val customerTrackActionApi: CustomerTrackActionApi
     val notificationApi: NotificationsApi
     val offerApi: OfferApi
+    val customerBillsApi: CustomerBillsApi
 }
 
 class NetworkModuleImpl(
@@ -55,6 +57,11 @@ class NetworkModuleImpl(
     }
 
     override val offerApi: OfferApi by lazy{
+            getRetrofit()
+            .create()
+    }
+
+    override val customerBillsApi: CustomerBillsApi by lazy{
             getRetrofit()
             .create()
     }

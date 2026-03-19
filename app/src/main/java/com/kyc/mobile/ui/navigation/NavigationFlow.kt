@@ -19,6 +19,7 @@ import com.kyc.mobile.ui.viewmodel.HomeViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 import com.kyc.mobile.ui.viewmodel.NotificationsViewModel
 import com.kyc.mobile.ui.viewmodel.viewModelFactory
+import kotlin.reflect.typeOf
 
 @Composable
 fun NavigationFlow(){
@@ -30,7 +31,7 @@ fun NavigationFlow(){
         composable<Intro>{
 
             IntroScreen(){
-                navController.navigate(Bills)
+                navController.navigate(Login)
             }
         }
 
@@ -66,7 +67,16 @@ fun NavigationFlow(){
                 viewModel = homeViewModel,
                 navigateToLogin = {
                     navController.navigate(Login)
-                })
+                },
+                navigateToBills = {
+                    navController.navigate(Bills)
+                },
+                navigateToNotifications = {
+                    navController.navigate(Notifications)
+                },
+                navigateToPayments = {
+                }
+            )
         }
 
         composable<Notifications>{
@@ -92,7 +102,7 @@ fun NavigationFlow(){
             val billViewModel = viewModel<BillViewModel>(
                 factory = viewModelFactory {
                     BillViewModel(
-
+                        KycMobileAndroidApplication.appModule.featureModule.customerBillsRepository
                     )
                 }
             )
@@ -108,7 +118,11 @@ fun NavigationFlow(){
             )
         }
 
-        composable<BillDetail>{ backStackEntry ->
+        composable<BillDetail>(
+            typeMap = mapOf(
+                typeOf<CustomerBill>() to createNavType<CustomerBill>()
+            )
+        ){ backStackEntry ->
             val args: BillDetail = backStackEntry.toRoute<BillDetail>()
             BillDetailScreen(
                 args.bill,
