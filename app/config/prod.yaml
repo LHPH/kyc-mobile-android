@@ -11,3 +11,6 @@ app-config:
   - key: "LOG_ENABLED"
     value: "true"
     type: "boolean"
+  - key: "MOCK_API"
+    value: "false"
+    type: "boolean"

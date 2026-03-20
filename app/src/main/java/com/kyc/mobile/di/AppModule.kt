@@ -1,6 +1,7 @@
 package com.kyc.mobile.di
 
 import android.content.Context
+import com.kyc.mobile.BuildConfig
 
 interface AppModule{
     val networkModule: NetworkModule
@@ -13,7 +14,12 @@ class AppModuleImpl(
 ): AppModule {
 
     override val networkModule: NetworkModule by lazy{
-        NetworkModuleImpl(dataStoreModule)
+        if(BuildConfig.MOCK_API){
+            MockNetworkModuleImpl(context)
+        }
+        else{
+            NetworkModuleImpl(dataStoreModule)
+        }
     }
 
     override val featureModule: FeatureModule by lazy{
