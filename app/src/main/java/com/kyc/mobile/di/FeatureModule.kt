@@ -1,10 +1,10 @@
 package com.kyc.mobile.di
 
-import com.kyc.mobile.data.remote.CustomerApplicationRepositoryImpl
-import com.kyc.mobile.data.remote.CustomerBillRepositoryImpl
-import com.kyc.mobile.data.remote.CustomerNotificationRepositoryImpl
-import com.kyc.mobile.data.remote.CustomerTrackActionRepositoryImpl
-import com.kyc.mobile.data.remote.LoginRepositoryImpl
+import com.kyc.mobile.data.remote.repository.CustomerApplicationRepositoryImpl
+import com.kyc.mobile.data.remote.repository.CustomerBillRepositoryImpl
+import com.kyc.mobile.data.remote.repository.CustomerNotificationRepositoryImpl
+import com.kyc.mobile.data.remote.repository.CustomerTrackActionRepositoryImpl
+import com.kyc.mobile.data.remote.repository.LoginRepositoryImpl
 import com.kyc.mobile.domain.usecase.CustomerApplicationRepository
 import com.kyc.mobile.domain.usecase.CustomerBillRepository
 import com.kyc.mobile.domain.usecase.CustomerNotificationRepository

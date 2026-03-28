@@ -106,7 +106,7 @@ fun NotificationView(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 40.dp),
-                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 20.dp),
+                        contentPadding = PaddingValues(start = 15.dp, top = 20.dp, bottom = 30.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

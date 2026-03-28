@@ -1,6 +1,5 @@
 package com.kyc.mobile.ui.screens.home
 
-//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,10 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyc.mobile.R
 import com.kyc.mobile.domain.model.CustomerContractService
-import com.kyc.mobile.domain.util.DateUtil
 import com.kyc.mobile.domain.util.GeneralUtil
 import com.kyc.mobile.ui.theme.algerianFontFamily
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun ServiceCardSection(
@@ -88,9 +85,7 @@ fun ServiceCardSection(
                 .padding(top = 40.dp)
         )
         Text(
-            text = DateUtil.parseLocalDateTimeToStringFormat(contractService.creationDate,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-                DateTimeFormatter.ISO_LOCAL_DATE),
+            text = contractService.creationDate,
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             modifier = Modifier

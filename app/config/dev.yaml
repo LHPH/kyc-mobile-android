@@ -12,5 +12,5 @@ app-config:
     value: "true"
     type: "boolean"
   - key: "MOCK_API"
-    value: "true"
+    value: "false"
     type: "boolean"
