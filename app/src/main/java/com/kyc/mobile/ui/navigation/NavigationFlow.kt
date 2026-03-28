@@ -1,6 +1,7 @@
 package com.kyc.mobile.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,6 +26,7 @@ import kotlin.reflect.typeOf
 fun NavigationFlow(){
 
     val navController = rememberNavController()
+    val appContext = LocalContext.current.applicationContext
 
     NavHost(navController = navController, startDestination = Intro){
 
@@ -40,6 +42,7 @@ fun NavigationFlow(){
             val loginViewModel = viewModel<LoginViewModel>(
                 factory = viewModelFactory {
                     LoginViewModel(
+                        appContext,
                         KycMobileAndroidApplication.appModule.featureModule.loginRepository,
                         KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository)
                 }

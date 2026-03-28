@@ -1,5 +1,6 @@
 package com.kyc.mobile.ui.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.kyc.mobile.domain.model.CustomerAction
 import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.domain.util.CredentialsUtil
+import com.kyc.mobile.domain.util.GeneralUtil
 import com.kyc.mobile.domain.util.TrackIdEnum
 import com.kyc.mobile.ui.screens.login.LoginAction
 import com.kyc.mobile.ui.screens.login.LoginEvent
@@ -27,6 +29,7 @@ import kotlinx.coroutines.launch
 const val LOGIN_TAG = "Login"
 
 class LoginViewModel(
+    private val appContext: Context,
     private val loginRepository: LoginRepository,
     private val customerTrackActionRepository: CustomerTrackActionRepository,
 ): ViewModel() {
@@ -41,17 +44,17 @@ class LoginViewModel(
         when(action){
             is LoginAction.OnUsernameChanged ->{
                 _loginState.update {
-                    var error = !CredentialsUtil.isValidUsername(action.value)
-                    var errorPassword = !CredentialsUtil.isValidPassword(it.password.value)
-                    var loginEnabled = !error && !errorPassword
+                    val error = !CredentialsUtil.isValidUsername(action.value)
+                    val errorPassword = !CredentialsUtil.isValidPassword(it.password.value)
+                    val loginEnabled = !error && !errorPassword
                     it.copy(loginEnabled = loginEnabled, username = LoginInput(action.value,error))
                 }
             }
             is LoginAction.OnPasswordChanged ->{
                 _loginState.update{
-                    var error = !CredentialsUtil.isValidPassword(action.value)
-                    var errorUsername = !CredentialsUtil.isValidUsername(it.username.value)
-                    var loginEnabled = !error && !errorUsername
+                    val error = !CredentialsUtil.isValidPassword(action.value)
+                    val errorUsername = !CredentialsUtil.isValidUsername(it.username.value)
+                    val loginEnabled = !error && !errorUsername
                     it.copy(loginEnabled = loginEnabled, password = LoginInput(action.value,error))
                 }
             }
@@ -78,7 +81,7 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO) {
 
             try{
-                var credentials = UserCredentials(_loginState.value.username.value,
+                val credentials = UserCredentials(_loginState.value.username.value,
                     _loginState.value.password.value)
 
                 Log.i(LOGIN_TAG, "Login user")
@@ -105,6 +108,7 @@ class LoginViewModel(
     private suspend fun registerAction(sessionData: SessionData){
 
         val params = HashMap<String,String>()
+        params["device"]= GeneralUtil.getDeviceId(appContext)
         params["ip"] = "127.0.0.2"
         params["longitude"] = "123456789"
         params["latitude"] = "987654321"

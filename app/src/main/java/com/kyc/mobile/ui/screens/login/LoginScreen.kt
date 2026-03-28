@@ -1,6 +1,5 @@
 package com.kyc.mobile.ui.screens.login
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -40,8 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
-import com.kyc.mobile.data.mock.MockCustomerTrackActionRepository
-import com.kyc.mobile.data.mock.MockLoginRepository
 import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.shared.KycAlertDialog
 import com.kyc.mobile.ui.shared.ObserveAsEvents
@@ -53,35 +50,41 @@ fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
     val localFocusManager = LocalFocusManager.current
     val loginState: LoginState by viewModel.loginState.collectAsStateWithLifecycle()
 
+
+    ObserveAsEvents(viewModel.events){ event ->
+        when(event){
+            is LoginEvent.onError ->{
+
+            }
+        }
+    }
+
+    LoginView(loginState, localFocusManager::clearFocus,navigatingToHome,viewModel::onAction)
+}
+
+@Composable
+fun LoginView(
+    loginState: LoginState,
+    clearFocus: (Boolean) -> Unit,
+    navigatingToHome: () -> Unit,
+    onAction: (LoginAction) -> Unit
+){
     Box(modifier = Modifier
         .fillMaxSize()
         .pointerInput(Unit){
-            detectTapGestures(onTap={
-                localFocusManager.clearFocus()
-            })
+            detectTapGestures(onTap={clearFocus(false)})
         }
         .paint(painter = painterResource(id = R.drawable.intro_kyc),
             contentScale = ContentScale.Crop)
 
     ){
 
-        ObserveAsEvents(viewModel.events){ event ->
-            when(event){
-                is LoginEvent.onError ->{
-
-                }
-            }
-        }
-
         when(loginState.state) {
             DisplayState.Idle -> {
-                Login(Modifier.align(Alignment.Center), loginState, viewModel)
+                Login(Modifier.align(Alignment.Center), loginState, onAction)
             }
             DisplayState.Loading -> {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
-                /*Box(modifier = Modifier.fillMaxSize()) {
-
-                }*/
             }
             DisplayState.Success -> {
                 navigatingToHome()
@@ -89,28 +92,28 @@ fun LoginScreen(viewModel: LoginViewModel, navigatingToHome: () -> Unit) {
             DisplayState.Exit -> {}
             is DisplayState.Error -> {
 
-                val error = (loginState.state as DisplayState.Error).messageData
+                val error = loginState.state.messageData
                 KycAlertDialog(
                     messageData = error,
                     dismissDialog = {
-                        viewModel.onAction(LoginAction.ResetStateToIdle)
+                        onAction(LoginAction.ResetStateToIdle)
                     })
-                Login(Modifier.align(Alignment.Center), loginState, viewModel)
+                Login(Modifier.align(Alignment.Center), loginState, onAction)
             }
         }
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, loginState: LoginState, viewModel: LoginViewModel){
+fun Login(modifier: Modifier, loginState: LoginState, onAction: (LoginAction) -> Unit){
 
     Column(modifier = modifier.padding(bottom = 80.dp)){
         HeaderImage(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(5.dp))
-        UserField(modifier = modifier,loginState, viewModel)
-        PasswordField(modifier = modifier,loginState,viewModel)
+        UserField(modifier = modifier,loginState, onAction)
+        PasswordField(modifier = modifier,loginState,onAction)
         LoginButton(loginState.loginEnabled){
-            viewModel.onAction(LoginAction.OnClickLogin)
+            onAction(LoginAction.OnClickLogin)
         }
     }
 }
@@ -123,10 +126,10 @@ fun HeaderImage(modifier: Modifier){
 
 @Composable
 fun UserField(modifier: Modifier, loginState: LoginState,
-              viewModel: LoginViewModel){
+              onAction: (LoginAction) -> Unit){
 
     OutlinedTextField(value = loginState.username.value,
-        onValueChange = {viewModel.onAction(LoginAction.OnUsernameChanged(it))},
+        onValueChange = {onAction(LoginAction.OnUsernameChanged(it))},
         isError = loginState.username.error,
         modifier = Modifier.fillMaxWidth()
             .padding(15.dp),
@@ -162,7 +165,7 @@ fun UserField(modifier: Modifier, loginState: LoginState,
 
 @Composable
 fun PasswordField(modifier: Modifier, loginState: LoginState,
-                  viewModel: LoginViewModel){
+                  onAction: (LoginAction) -> Unit){
 
     val painterVisibilityIcon = if(loginState.showPassword){
         painterResource(R.drawable.visibility_24px)
@@ -172,7 +175,7 @@ fun PasswordField(modifier: Modifier, loginState: LoginState,
     }
 
     OutlinedTextField(value = loginState.password.value,
-        onValueChange = {viewModel.onAction(LoginAction.OnPasswordChanged(it))},
+        onValueChange = {onAction(LoginAction.OnPasswordChanged(it))},
         isError = loginState.password.error,
         modifier = Modifier.fillMaxWidth()
             .padding(15.dp),
@@ -182,7 +185,7 @@ fun PasswordField(modifier: Modifier, loginState: LoginState,
             tint = MaterialTheme.colorScheme.onPrimary
         )},
         trailingIcon = {
-            IconButton(onClick = {viewModel.onAction(LoginAction.ShowPassword(loginState.showPassword))}) {
+            IconButton(onClick = {onAction(LoginAction.ShowPassword(loginState.showPassword))}) {
             Icon(
                 painter = painterVisibilityIcon,
                 contentDescription = null,
@@ -240,10 +243,7 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit){
 
 @Preview
 @Composable
-@SuppressLint("ViewModelConstructorInComposable")
 fun LoginScreenPreview(){
-    var viewModel = LoginViewModel(
-        loginRepository = MockLoginRepository(),
-        customerTrackActionRepository = MockCustomerTrackActionRepository())
-    LoginScreen(viewModel = viewModel, navigatingToHome = {})
+
+    LoginView(LoginState(), clearFocus = {}, navigatingToHome = {}, onAction = {})
 }

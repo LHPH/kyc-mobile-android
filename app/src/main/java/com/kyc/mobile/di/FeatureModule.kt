@@ -21,8 +21,8 @@ interface FeatureModule{
 }
 
 class FeatureModuleImpl(
-    val dataStoreModule: DataStoreModule,
-    val networkModule: NetworkModule
+    private val dataStoreModule: DataStoreModule,
+    private val networkModule: NetworkModule
 ): FeatureModule{
 
     override val loginRepository: LoginRepository by lazy{
