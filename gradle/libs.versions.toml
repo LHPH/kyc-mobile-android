@@ -23,6 +23,9 @@ datastore = "1.1.7"
 protobuf = "4.33.1"
 jackson = "2.20.0"
 passay = "1.6.4"
+firebase = "34.11.0"
+googleServices = "4.4.4"
+crashlytics = "3.0.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,9 +65,15 @@ jackson-dataformat-yml = { group = "com.fasterxml.jackson.dataformat", name = "j
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson"}
 jackson-module-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson"}
 passay = { group = "org.passay", name = "passay", version.ref = "passay"}
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
+firebase-remote-config = { group = "com.google.firebase", name = "firebase-config"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices"}
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics"}

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kyc.mobile.KycMobileAndroidApplication
 import com.kyc.mobile.domain.model.CustomerBill
 import com.kyc.mobile.ui.screens.bills.BillDetailScreen
@@ -27,6 +28,16 @@ fun NavigationFlow(){
 
     val navController = rememberNavController()
     val appContext = LocalContext.current.applicationContext
+    val analyticsManager = KycMobileAndroidApplication.appModule.firebaseModule.analyticsManager
+
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+
+        val params = HashMap<String,String>()
+        val route = destination.route ?: "Route NA"
+        params[FirebaseAnalytics.Param.SCREEN_NAME] = route
+        params[FirebaseAnalytics.Param.SCREEN_CLASS] = route
+        analyticsManager.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params)
+    }
 
     NavHost(navController = navController, startDestination = Intro){
 
@@ -44,7 +55,9 @@ fun NavigationFlow(){
                     LoginViewModel(
                         appContext,
                         KycMobileAndroidApplication.appModule.featureModule.loginRepository,
-                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository)
+                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository,
+                        analyticsManager
+                    )
                 }
             )
 

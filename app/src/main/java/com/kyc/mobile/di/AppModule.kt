@@ -7,6 +7,7 @@ interface AppModule{
     val networkModule: NetworkModule
     val featureModule: FeatureModule
     val dataStoreModule: DataStoreModule
+    val firebaseModule: FirebaseModule
 }
 
 class AppModuleImpl(
@@ -28,5 +29,9 @@ class AppModuleImpl(
 
     override val dataStoreModule: DataStoreModule by lazy{
         DataStoreModuleImpl(context)
+    }
+
+    override val firebaseModule: FirebaseModule by lazy {
+        FirebaseModuleImpl()
     }
 }

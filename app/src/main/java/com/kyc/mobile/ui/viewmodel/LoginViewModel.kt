@@ -8,6 +8,7 @@ import com.kyc.mobile.data.remote.dto.SessionData
 import com.kyc.mobile.data.remote.dto.UserCredentials
 import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.model.CustomerAction
+import com.kyc.mobile.domain.usecase.AnalyticsRepository
 import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.domain.util.CredentialsUtil
@@ -32,6 +33,7 @@ class LoginViewModel(
     private val appContext: Context,
     private val loginRepository: LoginRepository,
     private val customerTrackActionRepository: CustomerTrackActionRepository,
+    private val analyticsManager: AnalyticsRepository
 ): ViewModel() {
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState())
@@ -73,8 +75,8 @@ class LoginViewModel(
     }
 
     fun login(){
-
         Log.i(LOGIN_TAG, "Starting Login process")
+        analyticsManager.logEvent("login_app", mapOf("1" to "23"))
         _loginState.update{
             it.copy(state = DisplayState.Loading)
         }
@@ -98,6 +100,7 @@ class LoginViewModel(
             }
             catch(ex: KycMobileException){
                 Log.e(LOGIN_TAG, "Error in login",ex)
+                analyticsManager.logException(screenName = "Login", ex)
                 _loginState.update{
                     it.copy(state = DisplayState.Error(ex.errorData!!))
                 }
