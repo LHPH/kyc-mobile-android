@@ -18,6 +18,7 @@ import com.kyc.mobile.ui.screens.login.LoginScreen
 import com.kyc.mobile.ui.screens.notifications.NotificationsScreen
 import com.kyc.mobile.ui.viewmodel.BillViewModel
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
+import com.kyc.mobile.ui.viewmodel.IntroScreenViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 import com.kyc.mobile.ui.viewmodel.NotificationsViewModel
 import com.kyc.mobile.ui.viewmodel.viewModelFactory
@@ -29,6 +30,7 @@ fun NavigationFlow(){
     val navController = rememberNavController()
     val appContext = LocalContext.current.applicationContext
     val analyticsManager = KycMobileAndroidApplication.appModule.firebaseModule.analyticsManager
+    val remoteConfigManager = KycMobileAndroidApplication.appModule.firebaseModule.remoteConfigManager
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
 
@@ -43,9 +45,20 @@ fun NavigationFlow(){
 
         composable<Intro>{
 
-            IntroScreen(){
-                navController.navigate(Login)
-            }
+            val introScreenViewModel = viewModel<IntroScreenViewModel>(
+                factory = viewModelFactory {
+                    IntroScreenViewModel(
+                        remoteConfigManager
+                    )
+                }
+            )
+
+            IntroScreen(
+                viewModel = introScreenViewModel,
+                onStartClick = {
+                    navController.navigate(Login)
+                }
+            )
         }
 
         composable<Login>{

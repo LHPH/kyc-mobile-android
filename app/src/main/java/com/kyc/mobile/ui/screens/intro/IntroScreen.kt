@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,12 +23,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
 import com.kyc.mobile.ui.theme.algerianFontFamily
+import com.kyc.mobile.ui.viewmodel.IntroScreenViewModel
 
 @Composable
-@Preview
 fun IntroScreen(
+    viewModel: IntroScreenViewModel,
+    onStartClick: ()-> Unit = {}
+){
+
+    val splashScreenText by viewModel.splashScreenText.collectAsStateWithLifecycle()//"Your APP to manage your operations with KYC"
+    IntroScreenView(splashScreenText,onStartClick)
+}
+
+@Composable
+fun IntroScreenView(
+    splashScreenText: String,
     onStartClick: ()-> Unit = {}
 ){
 
@@ -50,7 +63,7 @@ fun IntroScreen(
                 .fillMaxSize()
         )
         Text(
-            text = "Your APP to manage your operations with KYC",
+            text = splashScreenText,
             fontFamily = algerianFontFamily,
             color = Color.White,
             fontSize = 26.sp,
@@ -91,5 +104,10 @@ fun IntroScreen(
             )
         }
     }
+}
 
+@Preview
+@Composable
+fun IntroScreenPreview(){
+    IntroScreenView(splashScreenText = "Your APP to manage your operations with KYC", onStartClick = {})
 }

@@ -29,7 +29,7 @@ class AnalyticsManager(
         analytics.logEvent(event, Bundle().apply {
             data.forEach { (key, value) ->
                 putString(key,value)
-                Log.i("Register", "$key - $value")
+                Log.i("AnalyticsManager", "$key - $value")
             }
         })
     }
