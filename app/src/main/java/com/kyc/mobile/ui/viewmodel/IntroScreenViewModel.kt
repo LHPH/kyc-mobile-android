@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 const val SPLASH_SCREEN_TEXT = "splash_screen_text"
 
@@ -26,13 +26,13 @@ class IntroScreenViewModel(
             SharingStarted.WhileSubscribed(6000),
             "")
 
-    fun loadData(){
-        remoteConfig.fetchAndActivate { success->
-            if(success){
-                _splashScreenText.update {
-                    remoteConfig.getConfigStringValue(SPLASH_SCREEN_TEXT)
-                }
+    fun loadData() {
+
+        viewModelScope.launch {
+            remoteConfig.fetchUpdate(SPLASH_SCREEN_TEXT).collect { updatedValue ->
+                _splashScreenText.value = updatedValue
             }
         }
     }
+
 }

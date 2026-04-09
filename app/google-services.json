@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "202015950294",
+    "project_id": "kyc-mobile-android",
+    "storage_bucket": "kyc-mobile-android.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202015950294:android:75675604729d1f2a00d077",
+        "android_client_info": {
+          "package_name": "com.kyc.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD79U3I4CuI__cxrwfswMcerWr51cotOtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
