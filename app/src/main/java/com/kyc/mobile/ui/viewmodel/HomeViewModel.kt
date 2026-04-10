@@ -11,7 +11,9 @@ import com.kyc.mobile.domain.usecase.CustomerApplicationRepository
 import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.DataStoreRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
+import com.kyc.mobile.domain.util.HomeMenuItemEnum
 import com.kyc.mobile.domain.util.TrackIdEnum
+import com.kyc.mobile.ui.screens.home.HomeAction
 import com.kyc.mobile.ui.screens.home.HomeState
 import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
@@ -30,10 +32,10 @@ class HomeViewModel(
     private val dataStoreRepository: DataStoreRepository
 ): ViewModel() {
 
-    private val _homeState = MutableStateFlow<HomeState>(HomeState())
+    private val _homeState = MutableStateFlow(HomeState())
     val homeState: StateFlow<HomeState> = _homeState
         .onStart {
-            loadData()
+            onAction(HomeAction.OnLoad)
         }
         .stateIn(
             viewModelScope,
@@ -41,11 +43,32 @@ class HomeViewModel(
             HomeState()
         )
 
-    private val _menuExpanded =  MutableLiveData<Boolean>()
-    val menuExpanded: LiveData<Boolean> = _menuExpanded
+    fun onAction(action: HomeAction){
 
-    fun onClickMenu(value: Boolean){
-        _menuExpanded.value = value
+        when(action){
+            is HomeAction.OnLoad -> {
+                loadData()
+            }
+            is HomeAction.OnCloseSession->{
+                closeSession()
+            }
+            is HomeAction.OnClickDropdown->{
+                _homeState.update {
+                    it.copy(expandedDropdown = action.state)
+                }
+            }
+            is HomeAction.OnClickDropdownItem->{
+                onActionMenuItem(action.item)
+            }
+        }
+    }
+
+    fun onActionMenuItem(item: HomeMenuItemEnum){
+        when(item){
+            HomeMenuItemEnum.CLOSE_SESSION ->{
+                closeSession()
+            }
+        }
     }
 
     fun loadData(){
@@ -67,6 +90,9 @@ class HomeViewModel(
 
     fun closeSession(){
 
+        _homeState.update {
+            it.copy(state = DisplayState.Loading, expandedDropdown = false)
+        }
         viewModelScope.launch(Dispatchers.IO) {
 
             try{

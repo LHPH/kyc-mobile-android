@@ -5,6 +5,7 @@ import com.kyc.mobile.ui.shared.DisplayState
 
 data class HomeState(
     val customerName: String = "",
-    val services: List<CustomerContractService> = emptyList<CustomerContractService>(),
-    val state: DisplayState = DisplayState.Idle
+    val services: List<CustomerContractService> = emptyList(),
+    val state: DisplayState = DisplayState.Idle,
+    val expandedDropdown: Boolean = false
 )

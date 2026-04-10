@@ -33,7 +33,6 @@ import com.kyc.mobile.R
 import com.kyc.mobile.ui.shared.DisplayState
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
@@ -44,7 +43,19 @@ fun HomeScreen(
 ) {
 
     val homeState by viewModel.homeState.collectAsStateWithLifecycle()
+    HomeScreenView(homeState,viewModel::onAction, navigateToLogin, navigateToBills, navigateToNotifications, navigateToPayments);
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenView(
+    homeState: HomeState,
+    onAction: (action: HomeAction) -> Unit = {},
+    navigateToLogin: ()-> Unit = {},
+    navigateToBills: ()->Unit = {},
+    navigateToNotifications: () -> Unit = {},
+    navigateToPayments: () -> Unit = {}
+){
     Scaffold (
         topBar = {
             TopAppBar(
@@ -57,7 +68,7 @@ fun HomeScreen(
                     },
                 title = {Text(text = "Welcome ${homeState.customerName}")},
                 actions = {
-                    AppBarScrollContent(viewModel)
+                    AppBarScrollContent(homeState.expandedDropdown,onAction)
                 },
             )
         },
@@ -118,7 +129,10 @@ fun HomeScreen(
             }
             DisplayState.Loading -> {
                 Box(modifier = Modifier.padding(paddingValues)
-                    .fillMaxSize()){
+                    .fillMaxSize()
+                    .paint(painter = painterResource(id = R.drawable.intro_kyc),
+                        contentScale = ContentScale.Crop)
+                ){
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
             }
@@ -126,7 +140,5 @@ fun HomeScreen(
                 val error: DisplayState.Error = homeState as DisplayState.Error
             }
         }
-
-
     }
 }

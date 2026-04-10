@@ -9,27 +9,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import com.kyc.mobile.ui.viewmodel.HomeViewModel
+import com.kyc.mobile.domain.util.HomeMenuItemEnum
 
 
 @Composable
 fun AppBarScrollContent(
-    viewModel: HomeViewModel
+    menuExpanded: Boolean = false,
+    onAction: (action: HomeAction) -> Unit ={},
 ) {
 
-    //var menuExpanded by remember { mutableStateOf(false) }
-    val menuExpanded: Boolean by viewModel.menuExpanded.observeAsState(false)
-
     IconButton(onClick = {
-        viewModel.onClickMenu(true)
+        onAction(HomeAction.OnClickDropdown(true))
     }) {
         Icon(Icons.Default.MoreVert, contentDescription = "More options")
     }
     DropdownMenu(
         expanded = menuExpanded,
-        onDismissRequest = { viewModel.onClickMenu(false) }
+        onDismissRequest = {
+            onAction(HomeAction.OnClickDropdown(false))
+        }
     ) {
         DropdownMenuItem(
             leadingIcon = {
@@ -39,9 +37,7 @@ fun AppBarScrollContent(
                 Text("Close Session")
             },
             onClick = {
-                // Handle Option 1 click
-                viewModel.closeSession()
-                viewModel.onClickMenu(false)
+               onAction(HomeAction.OnClickDropdownItem(HomeMenuItemEnum.CLOSE_SESSION))
             }
         )
     }
