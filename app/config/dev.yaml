@@ -12,7 +12,7 @@ app-config:
     value: "true"
     type: "boolean"
   - key: "MOCK_API"
-    value: "false"
+    value: "true"
     type: "boolean"
   - key: "REMOTE_CONFIG_MINIMUM_FETCH_INTERVAL_SEC"
     value: "10"

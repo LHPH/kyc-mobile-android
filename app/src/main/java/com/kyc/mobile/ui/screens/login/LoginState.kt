@@ -7,7 +7,9 @@ data class LoginState(
     val password: LoginInput = LoginInput(),
     val loginEnabled: Boolean = false,
     val showPassword: Boolean = false,
-    val state: DisplayState = DisplayState.Idle
+    val state: DisplayState = DisplayState.Idle,
+    val currentLatitude: Double? = null,
+    val currentLongitude: Double? = null
 )
 
 data class LoginInput(

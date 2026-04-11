@@ -10,6 +10,7 @@ import com.kyc.mobile.domain.exception.KycMobileException
 import com.kyc.mobile.domain.model.CustomerAction
 import com.kyc.mobile.domain.usecase.AnalyticsRepository
 import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
+import com.kyc.mobile.domain.usecase.LocationRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
 import com.kyc.mobile.domain.util.CredentialsUtil
 import com.kyc.mobile.domain.util.GeneralUtil
@@ -22,8 +23,11 @@ import com.kyc.mobile.ui.shared.DisplayState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -33,14 +37,34 @@ class LoginViewModel(
     private val appContext: Context,
     private val loginRepository: LoginRepository,
     private val customerTrackActionRepository: CustomerTrackActionRepository,
-    private val analyticsManager: AnalyticsRepository
+    private val analyticsManager: AnalyticsRepository,
+    private val locationRepository: LocationRepository
 ): ViewModel() {
 
-    private val _loginState = MutableStateFlow<LoginState>(LoginState())
+    private val _loginState = MutableStateFlow(LoginState())
     val loginState: StateFlow<LoginState> = _loginState
+        .onStart {
+            loadData()
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(6000),
+            LoginState()
+        )
 
     private val eventChannel = Channel<LoginEvent>()
     val events = eventChannel.receiveAsFlow()
+
+    fun loadData(){
+
+        viewModelScope.launch(Dispatchers.IO){
+            locationRepository.getLastLocation { location ->
+               _loginState.update {
+                   it.copy(currentLatitude = location.first, currentLongitude = location.second)
+               }
+            }
+        }
+    }
 
     fun onAction(action: LoginAction){
         when(action){
@@ -111,10 +135,11 @@ class LoginViewModel(
     private suspend fun registerAction(sessionData: SessionData){
 
         val params = HashMap<String,String>()
+
         params["device"]= GeneralUtil.getDeviceId(appContext)
-        params["ip"] = "127.0.0.2"
-        params["longitude"] = "123456789"
-        params["latitude"] = "987654321"
+        params["ip"] = GeneralUtil.getLocalIpAddress(appContext)
+        params["longitude"] = _loginState.value.currentLongitude.toString()
+        params["latitude"] = _loginState.value.currentLatitude.toString()
         params["category"] = "Auth"
         params["event"] = "Login"
 

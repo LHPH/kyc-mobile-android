@@ -69,7 +69,8 @@ fun NavigationFlow(){
                         appContext,
                         KycMobileAndroidApplication.appModule.featureModule.loginRepository,
                         KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository,
-                        analyticsManager
+                        analyticsManager,
+                        KycMobileAndroidApplication.appModule.googleServicesModule.location
                     )
                 }
             )
