@@ -92,7 +92,7 @@ fun LoginView(
             DisplayState.Exit -> {}
             is DisplayState.Error -> {
 
-                val error = loginState.state.messageData
+                val error = loginState.state.messageData!!
                 KycAlertDialog(
                     messageData = error,
                     dismissDialog = {

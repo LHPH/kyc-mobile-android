@@ -151,7 +151,7 @@ fun NotificationView(
             }
             DisplayState.Exit -> {}
             is DisplayState.Error ->{
-                val error = notificationState.state.messageData
+                val error = notificationState.state.messageData!!
                 KycAlertDialog(
                     messageData = error,
                     dismissDialog = {onAction(NotificationAction.OnDismissAlertError)})

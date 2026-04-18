@@ -204,7 +204,7 @@ fun BillView(
             }
             DisplayState.Exit -> {}
             is DisplayState.Error ->{
-                val error = billState.state.messageData
+                val error = billState.state.messageData!!
                 KycAlertDialog(
                     messageData = error,
                     dismissDialog = {onAction(BillAction.OnDismissAlertError)})

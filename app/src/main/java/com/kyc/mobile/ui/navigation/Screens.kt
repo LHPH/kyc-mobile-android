@@ -4,6 +4,8 @@ import com.kyc.mobile.domain.model.CustomerBill
 import kotlinx.serialization.Serializable
 
 @Serializable
+object Permissions
+@Serializable
 object Intro
 
 @Serializable

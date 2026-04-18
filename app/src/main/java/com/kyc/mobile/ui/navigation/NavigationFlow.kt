@@ -16,11 +16,13 @@ import com.kyc.mobile.ui.screens.home.HomeScreen
 import com.kyc.mobile.ui.screens.intro.IntroScreen
 import com.kyc.mobile.ui.screens.login.LoginScreen
 import com.kyc.mobile.ui.screens.notifications.NotificationsScreen
+import com.kyc.mobile.ui.screens.permissions.PermissionsScreen
 import com.kyc.mobile.ui.viewmodel.BillViewModel
 import com.kyc.mobile.ui.viewmodel.HomeViewModel
 import com.kyc.mobile.ui.viewmodel.IntroScreenViewModel
 import com.kyc.mobile.ui.viewmodel.LoginViewModel
 import com.kyc.mobile.ui.viewmodel.NotificationsViewModel
+import com.kyc.mobile.ui.viewmodel.PermissionsViewModel
 import com.kyc.mobile.ui.viewmodel.viewModelFactory
 import kotlin.reflect.typeOf
 
@@ -41,7 +43,23 @@ fun NavigationFlow(){
         analyticsManager.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW,params)
     }
 
-    NavHost(navController = navController, startDestination = Intro){
+    NavHost(navController = navController, startDestination = Permissions){
+
+        composable<Permissions>{
+
+            val permissionsViewModel = viewModel<PermissionsViewModel>(
+                factory = viewModelFactory {
+                    PermissionsViewModel(appContext)
+                }
+            )
+
+            PermissionsScreen(
+                permissionsViewModel = permissionsViewModel,
+                onGranted = {
+                    navController.navigate(Intro)
+                }
+            )
+        }
 
         composable<Intro>{
 

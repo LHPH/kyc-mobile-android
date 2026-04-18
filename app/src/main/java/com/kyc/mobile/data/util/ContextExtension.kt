@@ -23,7 +23,7 @@ fun Context.readRawResource(@RawRes resId: Int): String{
 
 fun Context.hasPermission(permission: String): Boolean = ContextCompat.checkSelfPermission(this,permission) == PackageManager.PERMISSION_GRANTED
 
-fun Context.hasPermissions(listPermissions: List<String>): Boolean{
+fun Context.hasPermissions(listPermissions: Array<String>): Boolean{
 
     return listPermissions
         .map { hasPermission(it) }
