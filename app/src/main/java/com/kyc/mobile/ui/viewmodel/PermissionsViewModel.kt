@@ -1,11 +1,8 @@
 package com.kyc.mobile.ui.viewmodel
 
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kyc.mobile.data.remote.dto.MessageData
 import com.kyc.mobile.data.util.hasPermission
 import com.kyc.mobile.ui.screens.permissions.PermissionAction
 import com.kyc.mobile.ui.screens.permissions.PermissionState
@@ -78,7 +75,7 @@ class PermissionsViewModel(
             }
             is PermissionAction.OnConfirmRationaleDialog ->{
                 _permissionState.update {
-                    it.copy(fireLauncher = it.fireLauncher+1, state = DisplayState.Loading)
+                    it.copy(state = DisplayState.Loading)
                 }
             }
             is PermissionAction.OnRejectRationaleDialog ->{
@@ -87,9 +84,20 @@ class PermissionsViewModel(
         }
     }
 
-    fun checkRationalePermissions(rationalePermissions: List<String>){
+    fun checkPermissionsResult(permissions: Map<String,Boolean>): Boolean{
 
+        if(!permissions.isEmpty()){
 
+            val granted = permissions.values.all { it }
+            if(!granted){
 
+                val notGranted = permissions.entries.filter { !it.value}.map { it.key }
+
+                return _permissionState.value.permissions.none {
+                    notGranted.contains(it.permission) && it.required
+                }
+            }
+        }
+        return true;
     }
 }

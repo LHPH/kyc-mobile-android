@@ -4,7 +4,6 @@ import android.Manifest
 import com.kyc.mobile.ui.shared.DisplayState
 
 data class PermissionState(
-    val fireLauncher:Int = 0,
     val granted: Boolean = false,
     val showRationaleDialog: Boolean = false,
     val state: DisplayState = DisplayState.Loading,

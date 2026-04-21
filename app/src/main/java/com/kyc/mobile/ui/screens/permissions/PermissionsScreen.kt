@@ -7,9 +7,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -18,10 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
@@ -40,8 +47,8 @@ fun PermissionsScreen(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { results ->
-        val granted = results.values.all{ it }
-        if(results.isEmpty() || granted){
+        val granted = permissionsViewModel.checkPermissionsResult(results)
+        if(granted){
             permissionsViewModel.onAction(PermissionAction.OnGrantedPermissions)
         }
         else{
@@ -110,11 +117,22 @@ fun PermissionScreenView(
             }
             is DisplayState.Exit->{
                 Button(
-                    modifier = Modifier.align(Alignment.Center),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        disabledContainerColor = Color.Gray
+                    ),
+                    modifier = Modifier.align(Alignment.Center)
+                        .fillMaxWidth()
+                        .padding(25.dp)
+                        .height(48.dp),
+                    shape = MaterialTheme.shapes.medium,
                     onClick = {
                         onOpenSettings()
                     }) {
-                        Text("Open System Settings")
+                        Text(
+                            text = "Open System Settings",
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
             }
             is DisplayState.Error -> {
@@ -163,5 +181,5 @@ fun ShowRationaleDialog(
 @Preview
 @Composable
 fun PermissionScreenPreview(){
-    PermissionScreenView(PermissionState())
+    PermissionScreenView(PermissionState(state = DisplayState.Exit))
 }
