@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kyc.mobile.data.remote.dto.SessionData
 import com.kyc.mobile.data.remote.dto.UserCredentials
 import com.kyc.mobile.domain.exception.KycMobileException
@@ -99,11 +100,13 @@ class LoginViewModel(
     }
 
     fun login(){
+
         Log.i(LOGIN_TAG, "Starting Login process")
-        analyticsManager.logEvent("login_app", mapOf("1" to "23"))
         _loginState.update{
             it.copy(state = DisplayState.Loading)
         }
+        val firebaseParamsEvent = mutableMapOf<String,String>()
+        firebaseParamsEvent["btn"] = "Login"
         viewModelScope.launch(Dispatchers.IO) {
 
             try{
@@ -112,6 +115,7 @@ class LoginViewModel(
 
                 Log.i(LOGIN_TAG, "Login user")
                 loginRepository.login(credentials)
+                firebaseParamsEvent["result"] = "Successful"
 
                 Log.i(LOGIN_TAG, "Check session")
                 val sessionData = loginRepository.sessionChecking()
@@ -124,10 +128,14 @@ class LoginViewModel(
             }
             catch(ex: KycMobileException){
                 Log.e(LOGIN_TAG, "Error in login",ex)
+                firebaseParamsEvent["status"] = "Failure"
                 analyticsManager.logException(screenName = "Login", ex)
                 _loginState.update{
                     it.copy(state = DisplayState.Error(ex.errorData!!))
                 }
+            }
+            finally {
+                analyticsManager.logEvent(FirebaseAnalytics.Event.LOGIN, firebaseParamsEvent)
             }
         }
     }

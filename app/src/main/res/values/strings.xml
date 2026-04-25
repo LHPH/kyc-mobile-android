@@ -8,4 +8,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="firebase_notification_channel_id" translatable="false">fcm_notification_channel</string>
+    <string name="kyc_notification_channel_id" translatable="false">kyc_notification_channel</string>
 </resources>

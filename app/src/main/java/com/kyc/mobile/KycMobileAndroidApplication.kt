@@ -1,7 +1,10 @@
 package com.kyc.mobile
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.datastore.dataStore
 import com.kyc.mobile.di.AppModule
 import com.kyc.mobile.di.AppModuleImpl
@@ -21,5 +24,13 @@ class KycMobileAndroidApplication(): Application(){
     override fun onCreate(){
         super.onCreate()
         appModule = AppModuleImpl(this)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val channelId = this.getString(R.string.firebase_notification_channel_id)
+            val channel = NotificationChannel(channelId, "KYC_NOTIFICATION_CHANNEL", NotificationManager.IMPORTANCE_HIGH)
+            manager.createNotificationChannel(channel)
+        }
     }
 }

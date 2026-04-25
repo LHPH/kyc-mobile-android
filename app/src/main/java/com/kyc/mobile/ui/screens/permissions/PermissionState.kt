@@ -11,7 +11,8 @@ data class PermissionState(
         PermissionData(Manifest.permission.INTERNET,true),
         PermissionData(Manifest.permission.ACCESS_NETWORK_STATE,true),
         PermissionData(Manifest.permission.ACCESS_COARSE_LOCATION,true),
-        PermissionData(Manifest.permission.ACCESS_FINE_LOCATION,true)
+        PermissionData(Manifest.permission.ACCESS_FINE_LOCATION,true),
+        PermissionData(Manifest.permission.POST_NOTIFICATIONS,true)
     )
 )
 
