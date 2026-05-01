@@ -28,9 +28,16 @@ class KycMobileAndroidApplication(): Application(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
             val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
             val channelId = this.getString(R.string.firebase_notification_channel_id)
-            val channel = NotificationChannel(channelId, "KYC_NOTIFICATION_CHANNEL", NotificationManager.IMPORTANCE_HIGH)
+            val channel = NotificationChannel(channelId, "FCM_NOTIFICATION_CHANNEL", NotificationManager.IMPORTANCE_HIGH)
             manager.createNotificationChannel(channel)
         }
+
+        /*FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if(it.isSuccessful){
+                println(it.result)
+            }
+        }*/
     }
 }

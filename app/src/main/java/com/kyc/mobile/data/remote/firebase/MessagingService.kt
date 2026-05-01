@@ -1,13 +1,10 @@
 package com.kyc.mobile.data.remote.firebase
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -43,11 +40,6 @@ class MessagingService: FirebaseMessagingService(){
             .setSmallIcon(R.drawable.mail_24px)
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-
-            val channel = NotificationChannel(channelId, "FCM_NOTIFICATION_CHANNEL", NotificationManager.IMPORTANCE_HIGH)
-            manager.createNotificationChannel(channel)
-        }
         manager.notify(Random.nextInt(),notificationBuilder.build())
 
     }
