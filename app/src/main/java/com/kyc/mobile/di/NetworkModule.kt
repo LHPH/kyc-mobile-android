@@ -10,6 +10,7 @@ import com.kyc.mobile.data.remote.api.OfferApi
 import com.kyc.mobile.data.remote.interceptors.JwtInterceptor
 import com.kyc.mobile.data.util.JsonDefaults
 import kotlinx.serialization.json.Json
+import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -73,11 +74,22 @@ class NetworkModuleImpl(
 
     private fun getOkHttpClient(): OkHttpClient{
 
-        val client = OkHttpClient.Builder()
+        val hostname = BuildConfig.HOSTNAME
+
+        val certificatePinner = if(BuildConfig.SSL_ENABLED){
+            CertificatePinner.Builder()
+                .add(hostname,"sha256/LIcNP/S48Gz5sc58yKP2pVgrd/shdqkDqCSrJ77avFA=")
+                .build()
+        }
+        else{
+            CertificatePinner.DEFAULT
+        }
+
+        return  OkHttpClient.Builder()
             .addInterceptor(jwtInterceptor())
             .addInterceptor(loggingInterceptor())
+            .certificatePinner(certificatePinner)
             .build()
-        return client
     }
 
     private fun loggingInterceptor(): Interceptor{
