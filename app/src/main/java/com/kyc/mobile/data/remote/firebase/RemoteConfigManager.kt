@@ -12,6 +12,8 @@ import com.kyc.mobile.domain.usecase.RemoteConfigRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class RemoteConfigManager(
     private val remoteConfig: FirebaseRemoteConfig
@@ -23,6 +25,18 @@ class RemoteConfigManager(
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+
+        val latch = CountDownLatch(1)
+
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
+            latch.countDown()
+        }
+
+        try {
+            latch.await(2, TimeUnit.SECONDS)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
     override fun fetchAndActivate(onComplete: (Boolean) -> Unit){

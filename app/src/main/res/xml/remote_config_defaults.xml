@@ -4,4 +4,8 @@
         <key>splash_screen_text</key>
         <value>Manage your operations with the KYC APP</value>
     </entry>
+    <entry>
+        <key>ssl_pin_primary</key>
+        <value>sha256/LIcNP/S48Gz5sc58yKP2pVgrd/shdqkDqCSrJ77avFA=</value>
+    </entry>
 </defaultsMap>

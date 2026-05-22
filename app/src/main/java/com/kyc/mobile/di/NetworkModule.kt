@@ -29,7 +29,8 @@ interface NetworkModule {
 }
 
 class NetworkModuleImpl(
-    private val dataStoreModule: DataStoreModule
+    private val dataStoreModule: DataStoreModule,
+    private val firebaseModule: FirebaseModule
 ): NetworkModule{
 
     val contentType = "application/json".toMediaType()
@@ -77,8 +78,10 @@ class NetworkModuleImpl(
         val hostname = BuildConfig.HOSTNAME
 
         val certificatePinner = if(BuildConfig.SSL_ENABLED){
+
+            val pin = firebaseModule.remoteConfigManager.getConfigStringValue("ssl_pin_primary")
             CertificatePinner.Builder()
-                .add(hostname,"sha256/LIcNP/S48Gz5sc58yKP2pVgrd/shdqkDqCSrJ77avFA=")
+                .add(hostname,pin)
                 .build()
         }
         else{

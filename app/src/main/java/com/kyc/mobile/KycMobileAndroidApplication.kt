@@ -22,8 +22,8 @@ class KycMobileAndroidApplication(): Application(){
     }
 
     override fun onCreate(){
+
         super.onCreate()
-        appModule = AppModuleImpl(this)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
@@ -33,6 +33,8 @@ class KycMobileAndroidApplication(): Application(){
             val channel = NotificationChannel(channelId, "FCM_NOTIFICATION_CHANNEL", NotificationManager.IMPORTANCE_HIGH)
             manager.createNotificationChannel(channel)
         }
+
+        appModule = AppModuleImpl(this)
 
         /*FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if(it.isSuccessful){

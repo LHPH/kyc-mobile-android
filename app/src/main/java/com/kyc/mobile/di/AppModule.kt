@@ -20,7 +20,7 @@ class AppModuleImpl(
             MockNetworkModuleImpl(context)
         }
         else{
-            NetworkModuleImpl(dataStoreModule)
+            NetworkModuleImpl(dataStoreModule,firebaseModule)
         }
     }
 
@@ -32,7 +32,7 @@ class AppModuleImpl(
         DataStoreModuleImpl(context)
     }
 
-    override val firebaseModule: FirebaseModule by lazy {
+   override val firebaseModule: FirebaseModule by lazy {
         FirebaseModuleImpl()
     }
 
