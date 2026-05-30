@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,7 +76,7 @@ fun NotificationView(
                 .clickable(enabled = true, onClick = onClickBack)
         )
         Text(
-            text = "Notifications",
+            text = stringResource(R.string.title_kyc_notifications),
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = algerianFontFamily,
             fontSize = 25.sp,
@@ -132,7 +133,7 @@ fun NotificationView(
                             )
                     ) {
                         Text(
-                            text = "No notifications",
+                            text = stringResource(R.string.title_no_notifications),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = algerianFontFamily,
                             fontSize = 28.sp,

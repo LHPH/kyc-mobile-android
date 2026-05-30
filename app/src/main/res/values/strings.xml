@@ -1,8 +1,21 @@
 <resources>
     <string name="app_name">kyc-mobile-android</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="placeholder_username">Username</string>
+    <string name="placeholder_password">Password</string>
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="label_invalid_username">The username is invalid</string>
+    <string name="label_invalid_password">The password is invalid</string>
+    <string name="btn_sign_in">Sign in</string>
+    <string name="btn_accept">Accept</string>
+    <string name="btn_action_open_system_settings">Open System Settings</string>
+    <string name="btn_ok">Ok</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="title_permissions_dialog">Permissions</string>
+    <string name="label_permissions_dialog">Required Permissions</string>
+    <string name="title_kyc_notifications">Notifications</string>
+    <string name="title_no_notifications">No notifications</string>
+    <string name="btn_gets_started">Gets Started</string>
     <string name="img_account_desc">Account</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>

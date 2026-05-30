@@ -32,6 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -140,13 +141,13 @@ fun UserField(modifier: Modifier, loginState: LoginState,
         )},
         label = {
             Text(
-                text = if (loginState.username.error) "The username is invalid" else "Username",
+                text = if (loginState.username.error)  stringResource(R.string.label_invalid_username) else  stringResource(R.string.label_username),
                 color = if(loginState.username.error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimary
                 )
         },
         placeholder = {
             Text(
-                text = "Username",
+                text = stringResource(R.string.placeholder_username),
                 color = MaterialTheme.colorScheme.onPrimary
             )
         },
@@ -194,13 +195,13 @@ fun PasswordField(modifier: Modifier, loginState: LoginState,
         }},
         label = {
             Text(
-                text = if(loginState.password.error) "The password is invalid" else "Password",
+                text = if(loginState.password.error) stringResource(R.string.label_invalid_password) else stringResource(R.string.label_password) ,
                 color = if(loginState.password.error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimary
             )
         },
         placeholder = {
             Text(
-                text = "Password",
+                text = stringResource(R.string.placeholder_password),
                 color = MaterialTheme.colorScheme.onPrimary
             )
         },
@@ -234,7 +235,7 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit){
         shape = MaterialTheme.shapes.medium
     ) {
         Text(
-            text = "Sign In",
+            text = stringResource(R.string.btn_sign_in),
             color = MaterialTheme.colorScheme.onPrimary
         )
     }

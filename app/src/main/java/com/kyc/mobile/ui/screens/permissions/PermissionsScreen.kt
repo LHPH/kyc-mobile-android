@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -130,7 +131,7 @@ fun PermissionScreenView(
                         onOpenSettings()
                     }) {
                         Text(
-                            text = "Open System Settings",
+                            text = stringResource(R.string.btn_action_open_system_settings),
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -160,19 +161,19 @@ fun ShowRationaleDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = "Permissions")
+            Text(text = stringResource(R.string.title_permissions_dialog),)
         },
         text = {
-            Text(text = "Permissions needed")
+            Text(text = stringResource(R.string.label_permissions_dialog))
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("OK")
+                Text(stringResource(R.string.btn_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.btn_cancel))
             }
         }
     )

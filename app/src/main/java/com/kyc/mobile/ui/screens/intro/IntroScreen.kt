@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +35,7 @@ fun IntroScreen(
     onStartClick: ()-> Unit = {}
 ){
 
-    val splashScreenText by viewModel.splashScreenText.collectAsStateWithLifecycle()//"Your APP to manage your operations with KYC"
+    val splashScreenText by viewModel.splashScreenText.collectAsStateWithLifecycle()
     IntroScreenView(splashScreenText,onStartClick)
 }
 
@@ -94,7 +95,7 @@ fun IntroScreenView(
             contentAlignment = Alignment.Center
         ){
             Text(
-                text = "Gets Started",
+                text = stringResource(R.string.btn_gets_started),
                 fontFamily = algerianFontFamily,
                 color = Color.White,
                 fontSize = 19.sp,
