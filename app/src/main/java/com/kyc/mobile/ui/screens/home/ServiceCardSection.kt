@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,7 @@ fun ServiceCardSection(
                 .padding(all = 16.dp)
         )
         Text(
-            text = "KYC",
+            text = stringResource(R.string.title_kyc),
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = algerianFontFamily,
             fontSize = 25.sp,
@@ -93,7 +94,7 @@ fun ServiceCardSection(
                 .padding(start = 16.dp, bottom = 10.dp)
         )
         Text(
-            text = "Folio: ${contractService.folio}",
+            text = "${stringResource(R.string.label_folio)} ${contractService.folio}",
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             modifier = Modifier

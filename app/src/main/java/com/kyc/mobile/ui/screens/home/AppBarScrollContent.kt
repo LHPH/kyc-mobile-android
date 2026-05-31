@@ -9,6 +9,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.kyc.mobile.R
 import com.kyc.mobile.domain.util.HomeMenuItemEnum
 
 
@@ -21,7 +23,8 @@ fun AppBarScrollContent(
     IconButton(onClick = {
         onAction(HomeAction.OnClickDropdown(true))
     }) {
-        Icon(Icons.Default.MoreVert, contentDescription = "More options")
+        Icon(Icons.Default.MoreVert,
+            contentDescription = stringResource(R.string.option_title_more_options))
     }
     DropdownMenu(
         expanded = menuExpanded,
@@ -31,10 +34,13 @@ fun AppBarScrollContent(
     ) {
         DropdownMenuItem(
             leadingIcon = {
-                Icon(Icons.Default.Close, contentDescription = "Close Session")
+                Icon(Icons.Default.Close,
+                    contentDescription = stringResource(R.string.option_title_close_session))
             },
             text = {
-                Text("Close Session")
+                Text(
+                    text = stringResource(R.string.option_title_close_session)
+                )
             },
             onClick = {
                onAction(HomeAction.OnClickDropdownItem(HomeMenuItemEnum.CLOSE_SESSION))

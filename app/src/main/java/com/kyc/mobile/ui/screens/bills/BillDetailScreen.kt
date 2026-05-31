@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ fun BillDetailScreen(
                 .clickable(enabled = true, onClick = onClickBack)
         )
         Text(
-            text = "Detail of bill",
+            text = stringResource(R.string.title_bill_details),
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = algerianFontFamily,
             fontSize = 25.sp,
@@ -88,17 +89,17 @@ fun BillDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.Start
             ){
-                BillDetailRowText("Folio:", "${bill.id}")
-                BillDetailRowText("Status:", bill.status)
-                BillDetailRowText("Subtotal:", "${bill.subtotal}")
-                BillDetailRowText("Taxes:", "${bill.taxes}")
-                BillDetailRowText("Total:", "${bill.total}")
-                BillDetailRowText("Issue:", bill.issueDate)
-                BillDetailRowText("Payment due:", bill.paymentDueDate)
-                BillDetailRowText("Billing start:", bill.billingStartDate)
-                BillDetailRowText("Billing end:", bill.billingFinishDate)
+                BillDetailRowText(stringResource(R.string.label_folio), "${bill.id}")
+                BillDetailRowText(stringResource(R.string.label_status), bill.status)
+                BillDetailRowText(stringResource(R.string.label_subtotal), "${bill.subtotal}")
+                BillDetailRowText(stringResource(R.string.label_taxes), "${bill.taxes}")
+                BillDetailRowText(stringResource(R.string.label_total), "${bill.total}")
+                BillDetailRowText(stringResource(R.string.label_issue_date), bill.issueDate)
+                BillDetailRowText(stringResource(R.string.label_payment_due_date), bill.paymentDueDate)
+                BillDetailRowText(stringResource(R.string.label_billing_start_date), bill.billingStartDate)
+                BillDetailRowText(stringResource(R.string.label_billing_end_date), bill.billingFinishDate)
                 if(bill.settled){
-                    BillDetailRowText("Settled:", bill.settlementDate ?: "NA")
+                    BillDetailRowText(stringResource(R.string.label_settled_bill), bill.settlementDate ?: "NA")
                 }
             }
         }

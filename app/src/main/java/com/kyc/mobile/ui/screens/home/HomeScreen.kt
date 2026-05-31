@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
@@ -79,13 +80,21 @@ fun HomeScreenView(
                     selected = false,
                     onClick = navigateToBills,
                     icon = { Icon(Icons.Filled.Info, null) },
-                    label = { Text(text = "Bills") }
+                    label = {
+                        Text(
+                            text = stringResource(R.string.option_title_bills)
+                        )
+                    }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = navigateToNotifications,
                     icon = { Icon(Icons.Filled.Notifications, null) },
-                    label = { Text(text = "Notifications") }
+                    label = {
+                        Text(
+                            text = stringResource(R.string.option_title_notifications)
+                        )
+                    }
                 )
                 NavigationBarItem(
                     selected = false,
@@ -94,7 +103,11 @@ fun HomeScreenView(
                         painter = painterResource(R.drawable.paid_24px),
                         contentDescription = ""
                     ) },
-                    label = { Text(text = "Payments") }
+                    label = {
+                        Text(
+                            text = stringResource(R.string.option_title_payments)
+                        )
+                    }
                 )
             }
         }){ paddingValues ->

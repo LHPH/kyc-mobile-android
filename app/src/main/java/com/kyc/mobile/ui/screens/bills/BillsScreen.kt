@@ -1,6 +1,5 @@
 package com.kyc.mobile.ui.screens.bills
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,6 +34,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
@@ -128,25 +127,33 @@ fun BillView(
                     ) {
                         DropdownMenuItem(
                             text ={
-                                Text("All")
+                                Text(
+                                    text = stringResource(R.string.option_title_all)
+                                )
                             },
                             onClick = { onAction(BillAction.OnClickDropdownItem(""))}
                         )
                         DropdownMenuItem(
                             text ={
-                                Text("Paid")
+                                Text(
+                                    text = stringResource(R.string.option_title_paid)
+                                )
                             },
                             onClick = { onAction(BillAction.OnClickDropdownItem("PAID")) }
                         )
                         DropdownMenuItem(
                             text ={
-                                Text("Valid")
+                                Text(
+                                    text = stringResource(R.string.option_title_valid)
+                                )
                             },
                             onClick = { onAction(BillAction.OnClickDropdownItem("VALID")) }
                         )
                         DropdownMenuItem(
                             text ={
-                                Text("Canceled")
+                                Text(
+                                    text = stringResource(R.string.option_title_canceled)
+                                )
                             },
                             onClick = { onAction(BillAction.OnClickDropdownItem("CANCELED")) }
                         )
@@ -154,7 +161,7 @@ fun BillView(
                 }
 
 
-                var sizeBills = billState.displayedBills.size
+                val sizeBills = billState.displayedBills.size
                 if(sizeBills > 0){
 
                     LazyColumn(
@@ -186,7 +193,7 @@ fun BillView(
                             )
                     ) {
                         Text(
-                            text = "There is not bills",
+                            text = stringResource(R.string.title_no_bills),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = algerianFontFamily,
                             fontSize = 28.sp,

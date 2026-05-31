@@ -100,7 +100,7 @@ fun NotificationView(
             DisplayState.Idle,
             DisplayState.Success -> {
 
-                var sizeNotifications = notificationState.notifications.size
+                val sizeNotifications = notificationState.notifications.size
                 if(sizeNotifications > 0){
 
                     LazyColumn(
