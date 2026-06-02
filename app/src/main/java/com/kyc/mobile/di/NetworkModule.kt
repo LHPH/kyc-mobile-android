@@ -7,6 +7,7 @@ import com.kyc.mobile.data.remote.api.CustomerBillsApi
 import com.kyc.mobile.data.remote.api.CustomerTrackActionApi
 import com.kyc.mobile.data.remote.api.NotificationsApi
 import com.kyc.mobile.data.remote.api.OfferApi
+import com.kyc.mobile.data.remote.api.PublicApi
 import com.kyc.mobile.data.remote.interceptors.JwtInterceptor
 import com.kyc.mobile.data.util.JsonDefaults
 import kotlinx.serialization.json.Json
@@ -26,6 +27,7 @@ interface NetworkModule {
     val notificationApi: NotificationsApi
     val offerApi: OfferApi
     val customerBillsApi: CustomerBillsApi
+    val publicApi: PublicApi
 }
 
 class NetworkModuleImpl(
@@ -61,6 +63,11 @@ class NetworkModuleImpl(
     }
 
     override val customerBillsApi: CustomerBillsApi by lazy{
+            getRetrofit()
+            .create()
+    }
+
+    override val publicApi: PublicApi by lazy{
             getRetrofit()
             .create()
     }

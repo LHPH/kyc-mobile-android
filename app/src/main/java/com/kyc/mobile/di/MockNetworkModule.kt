@@ -7,12 +7,14 @@ import com.kyc.mobile.data.mock.api.MockCustomerBillsApi
 import com.kyc.mobile.data.mock.api.MockCustomerTrackActionApi
 import com.kyc.mobile.data.mock.api.MockNotificationsApi
 import com.kyc.mobile.data.mock.api.MockOffersApi
+import com.kyc.mobile.data.mock.api.MockPublicApi
 import com.kyc.mobile.data.remote.api.AuthApi
 import com.kyc.mobile.data.remote.api.CustomerApplicationApi
 import com.kyc.mobile.data.remote.api.CustomerBillsApi
 import com.kyc.mobile.data.remote.api.CustomerTrackActionApi
 import com.kyc.mobile.data.remote.api.NotificationsApi
 import com.kyc.mobile.data.remote.api.OfferApi
+import com.kyc.mobile.data.remote.api.PublicApi
 import kotlinx.serialization.json.Json
 
 class MockNetworkModuleImpl(
@@ -46,5 +48,9 @@ class MockNetworkModuleImpl(
 
     override val customerBillsApi: CustomerBillsApi by lazy {
         MockCustomerBillsApi(context)
+    }
+
+    override val publicApi: PublicApi by lazy{
+        MockPublicApi(context)
     }
 }
