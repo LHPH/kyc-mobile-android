@@ -1,5 +1,7 @@
 import com.kyc.mobile.buildsrc.AppConfig
 import com.kyc.mobile.buildsrc.readYamlConfig
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     alias(libs.plugins.android.application)
@@ -8,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.android.room3)
 }
 
 android {
@@ -53,11 +57,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
@@ -69,6 +70,17 @@ android {
             excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
+}
+
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+
+room3 {
+    // Defines the base directory for exported JSON schemas
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
@@ -107,6 +119,9 @@ dependencies {
     implementation(libs.firebase.remote.config)
     implementation(libs.firebase.messaging)
     implementation(libs.play.services.location)
+    implementation(libs.android.room3.runtime)
+    ksp(libs.android.room3.compiler)
+
 
     testImplementation(libs.junit)
 
