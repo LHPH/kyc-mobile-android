@@ -10,7 +10,6 @@ import com.kyc.mobile.data.remote.api.OfferApi
 import com.kyc.mobile.data.remote.api.PublicApi
 import com.kyc.mobile.data.remote.interceptors.JwtInterceptor
 import com.kyc.mobile.data.util.JsonDefaults
-import kotlinx.serialization.json.Json
 import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -36,6 +35,9 @@ class NetworkModuleImpl(
 ): NetworkModule{
 
     val contentType = "application/json".toMediaType()
+    val okHttpClient: OkHttpClient by lazy {
+        getOkHttpClient()
+    }
 
     override val authApi: AuthApi by lazy{
             getRetrofit()
@@ -76,7 +78,7 @@ class NetworkModuleImpl(
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(JsonDefaults.instance.asConverterFactory(contentType))
-            .client(getOkHttpClient())
+            .client(okHttpClient)
             .build()
     }
 
