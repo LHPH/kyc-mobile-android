@@ -31,8 +31,25 @@ fun NavigationFlow(){
 
     val navController = rememberNavController()
     val appContext = LocalContext.current.applicationContext
-    val analyticsManager = KycMobileAndroidApplication.appModule.firebaseModule.analyticsManager
-    val remoteConfigManager = KycMobileAndroidApplication.appModule.firebaseModule.remoteConfigManager
+    
+    val appModule = KycMobileAndroidApplication.appModule
+    val firebaseModule = appModule.firebaseModule
+    val featureModule = appModule.featureModule
+    val googleServicesModule = appModule.googleServicesModule
+    val dataStoreModule = appModule.dataStoreModule
+    
+    val analyticsManager = firebaseModule.analyticsManager
+    val remoteConfigManager = firebaseModule.remoteConfigManager
+    val propertyRepository = dataStoreModule.propertiesRepository
+    val publicRepository = featureModule.publicRepository
+    val loginRepository = featureModule.loginRepository
+    val customerTrackActionRepository = featureModule.customerTrackActionRepository
+    val locationRepository = googleServicesModule.location
+    val dataStoreRepository = dataStoreModule.dataStoreRepository
+    val customerApplicationRepository = featureModule.customerApplicationRepository
+    val customerNotificationRepository = featureModule.customerNotificationRepository
+    val customerBillsRepository = featureModule.customerBillsRepository
+    
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
 
@@ -66,7 +83,9 @@ fun NavigationFlow(){
             val introScreenViewModel = viewModel<IntroScreenViewModel>(
                 factory = viewModelFactory {
                     IntroScreenViewModel(
-                        remoteConfigManager
+                        remoteConfigManager,
+                        propertyRepository,
+                        publicRepository
                     )
                 }
             )
@@ -85,10 +104,10 @@ fun NavigationFlow(){
                 factory = viewModelFactory {
                     LoginViewModel(
                         appContext,
-                        KycMobileAndroidApplication.appModule.featureModule.loginRepository,
-                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository,
+                        loginRepository,
+                        customerTrackActionRepository,
                         analyticsManager,
-                        KycMobileAndroidApplication.appModule.googleServicesModule.location
+                        locationRepository
                     )
                 }
             )
@@ -103,10 +122,10 @@ fun NavigationFlow(){
             val homeViewModel = viewModel<HomeViewModel>(
                 factory = viewModelFactory {
                     HomeViewModel(
-                        KycMobileAndroidApplication.appModule.featureModule.loginRepository,
-                        KycMobileAndroidApplication.appModule.featureModule.customerApplicationRepository,
-                        KycMobileAndroidApplication.appModule.featureModule.customerTrackActionRepository,
-                        KycMobileAndroidApplication.appModule.dataStoreModule.dataStoreRepository
+                        loginRepository,
+                        customerApplicationRepository,
+                        customerTrackActionRepository,
+                        dataStoreRepository
                     )
                 }
             )
@@ -132,7 +151,7 @@ fun NavigationFlow(){
             val notificationViewModel= viewModel<NotificationsViewModel>(
                 factory = viewModelFactory {
                     NotificationsViewModel(
-                        KycMobileAndroidApplication.appModule.featureModule.customerNotificationRepository
+                        customerNotificationRepository
                     )
                 }
             )
@@ -150,7 +169,7 @@ fun NavigationFlow(){
             val billViewModel = viewModel<BillViewModel>(
                 factory = viewModelFactory {
                     BillViewModel(
-                        KycMobileAndroidApplication.appModule.featureModule.customerBillsRepository
+                        customerBillsRepository
                     )
                 }
             )

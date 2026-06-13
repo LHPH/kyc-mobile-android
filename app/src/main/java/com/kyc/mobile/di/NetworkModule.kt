@@ -36,7 +36,7 @@ class NetworkModuleImpl(
 
     val contentType = "application/json".toMediaType()
     val okHttpClient: OkHttpClient by lazy {
-        getOkHttpClient()
+        buildOkHttpClient()
     }
 
     override val authApi: AuthApi by lazy{
@@ -82,7 +82,7 @@ class NetworkModuleImpl(
             .build()
     }
 
-    private fun getOkHttpClient(): OkHttpClient{
+    private fun buildOkHttpClient(): OkHttpClient{
 
         val hostname = BuildConfig.HOSTNAME
 

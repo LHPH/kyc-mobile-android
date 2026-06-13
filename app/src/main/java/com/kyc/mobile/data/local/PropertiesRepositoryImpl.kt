@@ -33,5 +33,7 @@ class PropertiesRepositoryImpl(
         return propertyDao.getPropertyByPropertyKey(key)?.toModel()
     }
 
-
+    override suspend fun checkPropertyByKey(key: String): Boolean {
+        return getPropertyByKey(key) != null
+    }
 }

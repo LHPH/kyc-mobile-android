@@ -13,7 +13,7 @@ class PublicRepositoryImpl(
 
     override suspend fun getPublicKey(): String {
 
-        var result = handlingApiResponse {
+        val result = handlingApiResponse {
             publicApi.getPublicKey()
         }
             .onSuccess {
