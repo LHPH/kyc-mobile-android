@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kyc.mobile.R
+import com.kyc.mobile.ui.shared.DisplayState
+import com.kyc.mobile.ui.shared.KycAlertDialog
 import com.kyc.mobile.ui.theme.algerianFontFamily
 import com.kyc.mobile.ui.viewmodel.IntroScreenViewModel
 
@@ -36,15 +40,18 @@ fun IntroScreen(
 ){
 
     val splashScreenText by viewModel.splashScreenText.collectAsStateWithLifecycle()
-    IntroScreenView(splashScreenText,onStartClick)
+    val introScreenState by viewModel.introScreenState.collectAsStateWithLifecycle()
+    IntroScreenView(splashScreenText,
+        introScreenState,viewModel::onAction,onStartClick)
 }
 
 @Composable
 fun IntroScreenView(
     splashScreenText: String,
+    introScreenState: IntroScreenState,
+    onAction: (IntroScreenAction) -> Unit = {},
     onStartClick: ()-> Unit = {}
 ){
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -91,24 +98,53 @@ fun IntroScreenView(
                     color = Color.Transparent,
                     shape = RoundedCornerShape(size = 12.dp)
                 )
-                .clickable { onStartClick() },
+                .clickable(
+                    enabled = introScreenState.state is DisplayState.Success,
+                    onClick = {onAction(IntroScreenAction.OnClickButton(onStartClick))}
+                ),
             contentAlignment = Alignment.Center
         ){
-            Text(
-                text = stringResource(R.string.btn_gets_started),
-                fontFamily = algerianFontFamily,
-                color = Color.White,
-                fontSize = 19.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 22.sp,
-                modifier = Modifier.padding(start = 18.dp)
-            )
+
+            if(introScreenState.state is DisplayState.Success){
+
+                Text(
+                    text = stringResource(R.string.btn_gets_started),
+                    fontFamily = algerianFontFamily,
+                    color = Color.White,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Normal,
+                    lineHeight = 22.sp,
+                    modifier = Modifier.padding(start = 18.dp)
+                )
+            }
+            else{
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                        .size(30.dp),
+                    color = Color.White,
+                    strokeWidth = 3.0.dp
+                )
+            }
         }
+    }
+
+    if(introScreenState.state is DisplayState.Error){
+
+        val error = introScreenState.state.messageData!!
+        KycAlertDialog(
+            messageData = error,
+            dismissDialog = {
+                onAction(IntroScreenAction.ResetStateToIdle)
+            })
     }
 }
 
 @Preview
 @Composable
 fun IntroScreenPreview(){
-    IntroScreenView(splashScreenText = "Your APP to manage your operations with KYC", onStartClick = {})
+    IntroScreenView(
+        splashScreenText = "Your APP to manage your operations with KYC",
+        introScreenState = IntroScreenState(),
+        onAction = {},
+        onStartClick = {})
 }
