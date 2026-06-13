@@ -1,4 +1,4 @@
-package com.kyc.mobile.data.local
+package com.kyc.mobile.data.local.repository
 
 import android.content.Context
 import com.google.android.gms.location.LocationServices

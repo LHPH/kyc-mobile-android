@@ -1,4 +1,4 @@
-package com.kyc.mobile.data.local
+package com.kyc.mobile.data.local.repository
 
 import androidx.datastore.core.DataStore
 import com.kyc.mobile.data.util.SingletonHolder

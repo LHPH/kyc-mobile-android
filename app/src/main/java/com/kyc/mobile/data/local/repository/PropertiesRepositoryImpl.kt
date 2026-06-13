@@ -1,4 +1,4 @@
-package com.kyc.mobile.data.local
+package com.kyc.mobile.data.local.repository
 
 import com.kyc.mobile.data.local.dao.PropertyDao
 import com.kyc.mobile.data.local.entity.toModel

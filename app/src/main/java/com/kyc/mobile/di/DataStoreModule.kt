@@ -1,9 +1,9 @@
 package com.kyc.mobile.di
 
 import android.content.Context
-import com.kyc.mobile.data.local.DataStoreRepositoryImpl
+import com.kyc.mobile.data.local.repository.DataStoreRepositoryImpl
 import com.kyc.mobile.data.local.LocalDatabase
-import com.kyc.mobile.data.local.PropertiesRepositoryImpl
+import com.kyc.mobile.data.local.repository.PropertiesRepositoryImpl
 import com.kyc.mobile.dataStore
 import com.kyc.mobile.domain.usecase.DataStoreRepository
 import com.kyc.mobile.domain.usecase.PropertiesRepository
