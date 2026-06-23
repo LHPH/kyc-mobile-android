@@ -9,6 +9,7 @@ interface AppModule{
     val dataStoreModule: DataStoreModule
     val firebaseModule: FirebaseModule
     val googleServicesModule: GoogleServicesModule
+    val securityModule: SecurityModule
 }
 
 class AppModuleImpl(
@@ -20,7 +21,7 @@ class AppModuleImpl(
             MockNetworkModuleImpl(context)
         }
         else{
-            NetworkModuleImpl(dataStoreModule,firebaseModule)
+            NetworkModuleImpl(dataStoreModule,firebaseModule,securityModule)
         }
     }
 
@@ -38,5 +39,9 @@ class AppModuleImpl(
 
     override val googleServicesModule: GoogleServicesModule by lazy{
         GoogleServicesModuleImpl(context)
+    }
+
+    override val securityModule: SecurityModule by lazy{
+        SecurityModuleImpl()
     }
 }

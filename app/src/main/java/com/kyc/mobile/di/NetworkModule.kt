@@ -8,6 +8,7 @@ import com.kyc.mobile.data.remote.api.CustomerTrackActionApi
 import com.kyc.mobile.data.remote.api.NotificationsApi
 import com.kyc.mobile.data.remote.api.OfferApi
 import com.kyc.mobile.data.remote.api.PublicApi
+import com.kyc.mobile.data.remote.interceptors.CryptInterceptor
 import com.kyc.mobile.data.remote.interceptors.JwtInterceptor
 import com.kyc.mobile.data.util.JsonDefaults
 import okhttp3.CertificatePinner
@@ -31,7 +32,8 @@ interface NetworkModule {
 
 class NetworkModuleImpl(
     private val dataStoreModule: DataStoreModule,
-    private val firebaseModule: FirebaseModule
+    private val firebaseModule: FirebaseModule,
+    private val securityModule: SecurityModule
 ): NetworkModule{
 
     val contentType = "application/json".toMediaType()
@@ -99,6 +101,7 @@ class NetworkModuleImpl(
 
         return  OkHttpClient.Builder()
             .addInterceptor(jwtInterceptor())
+            .addInterceptor(cryptInterceptor())
             .addInterceptor(loggingInterceptor())
             .certificatePinner(certificatePinner)
             .build()
@@ -119,5 +122,13 @@ class NetworkModuleImpl(
 
     private fun jwtInterceptor(): JwtInterceptor{
         return JwtInterceptor(dataStoreModule.dataStoreRepository)
+    }
+
+    private fun cryptInterceptor(): CryptInterceptor{
+        return CryptInterceptor(
+            dataStoreModule.propertiesRepository,
+            securityModule.aesCipher,
+            securityModule.rsaCipher
+        )
     }
 }
