@@ -7,7 +7,6 @@ import com.kyc.mobile.data.remote.dto.SessionData
 import com.kyc.mobile.data.remote.dto.TokenData
 import com.kyc.mobile.data.remote.dto.UserCredentials
 import com.kyc.mobile.data.remote.handlingApiResponse
-import com.kyc.mobile.domain.model.UserPreferences
 import com.kyc.mobile.domain.usecase.DataStoreRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
 
@@ -31,14 +30,22 @@ class LoginRepositoryImpl(
 
         val responseData: ResponseData<TokenData>  = result.getOrThrow()
         val token = responseData.data?.token!!
-        dataStoreRepository.saveToDataStore(UserPreferences(token = token))
+        val userPreferences = dataStoreRepository.getUserPreferencesFromDataStore()
+        dataStoreRepository.saveToDataStore(userPreferences.copy(token = token))
     }
 
     override suspend fun logout(){
 
         try{
             authApi.logout()
-            dataStoreRepository.saveToDataStore(UserPreferences())
+            val userPreferences = dataStoreRepository.getUserPreferencesFromDataStore()
+            dataStoreRepository.saveToDataStore(userPreferences.copy(
+                token = "",
+                userId = 0,
+                customerId = 0,
+                role = "",
+                name = ""
+            ))
         }
         catch(ex: Exception){
             Log.e("Login","Exception",ex)
@@ -60,7 +67,8 @@ class LoginRepositoryImpl(
         val responseService: ResponseData<SessionData> = result.getOrThrow()
 
         val sessionData = responseService.data!!
-        dataStoreRepository.saveToDataStore(UserPreferences(
+        val userPreferences = dataStoreRepository.getUserPreferencesFromDataStore()
+        dataStoreRepository.saveToDataStore(userPreferences.copy(
             userId = sessionData.user,
             customerId = sessionData.owner,
             role = sessionData.role,

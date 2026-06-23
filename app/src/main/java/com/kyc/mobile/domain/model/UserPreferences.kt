@@ -15,7 +15,8 @@ data class UserPreferences(
     val userId: Long = 0,
     val customerId: Long = 0,
     val role: String = "",
-    val name: String = ""
+    val name: String = "",
+    val publicKeyTimestamp : Long = 0
 )
 
 object UserPreferencesSerializable: Serializer<UserPreferences>{

@@ -1,3 +1,6 @@
 {
-  "data": "key"
+  "data": {
+    "kid": "2",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw6ff6lid4DV17sGzFn2xq9G1yb5wEVuzaWzsJ0J4RKBSvNCIvAZ5jEI2GmvhErCAJoVa46ne0sgZLKadtiPnHm7x3QqzqnVrHyLBH89BdaQmWWOnmUXhfdpLA4BCnzyZpu0yOVK2ThbzxBbFGsEVeoMoPPXTG/9RZeWI7TI7apfNajFnp5j2g6+cKk8LtZIpMpjXdMn8UbssjntC1GjTW5DR7SK2R7eswlWsA6bvJs/T6kIGrPKP/IiCwsEXOaJy+ZuJcz+MGv5QMD7lkUHb5AsJo9rjRDhKsLmPu4WTPmjlqEd/v5H2LHD/l48kISExSlMfrOXqPj9OU9x1d87QmQIDAQAB"
+  }
 }

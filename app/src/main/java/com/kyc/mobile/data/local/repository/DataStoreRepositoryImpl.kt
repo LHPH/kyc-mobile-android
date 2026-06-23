@@ -26,7 +26,7 @@ class DataStoreRepositoryImpl private constructor(
     }
 
     override suspend fun getUserPreferencesFromDataStore(): UserPreferences {
-        return dataStore.data.first()
+        return dataStore.data.firstOrNull() ?: UserPreferences()
     }
 
     companion object: SingletonHolder<DataStoreRepositoryImpl,DataStore<UserPreferences>>(::DataStoreRepositoryImpl)

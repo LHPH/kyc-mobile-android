@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.kyc.mobile.R
 import com.kyc.mobile.data.remote.api.PublicApi
+import com.kyc.mobile.data.remote.dto.PublicKeyResponse
 import com.kyc.mobile.data.remote.dto.ResponseData
 import com.kyc.mobile.data.util.decodeToResponseData
 import com.kyc.mobile.data.util.readRawResource
@@ -16,13 +17,13 @@ class MockPublicApi(
     private val context: Context
 ): PublicApi{
 
-    override suspend fun getPublicKey(): Response<ResponseData<String>> {
+    override suspend fun getPublicKey(): Response<ResponseData<PublicKeyResponse>> {
 
         delay(500)
 
         val jsonResponse = context.readRawResource(R.raw.mock_successful_response_get_public_key)
         Log.d(MOCK_PUBLIC_API, "getPublicKey $jsonResponse")
-        val responseData: ResponseData<String> = Json.decodeToResponseData(jsonResponse);
+        val responseData: ResponseData<PublicKeyResponse> = Json.decodeToResponseData(jsonResponse);
         return Response.success(responseData);
     }
 }

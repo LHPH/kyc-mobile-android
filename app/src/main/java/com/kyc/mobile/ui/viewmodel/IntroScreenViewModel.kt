@@ -4,11 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kyc.mobile.domain.exception.KycMobileException
-import com.kyc.mobile.domain.model.LocalProperty
-import com.kyc.mobile.domain.usecase.PropertiesRepository
-import com.kyc.mobile.domain.usecase.PublicRepository
+import com.kyc.mobile.domain.usecase.PublicKeyRepository
 import com.kyc.mobile.domain.usecase.RemoteConfigRepository
-import com.kyc.mobile.domain.util.PropertyKeyEnum
 import com.kyc.mobile.ui.screens.intro.IntroScreenAction
 import com.kyc.mobile.ui.screens.intro.IntroScreenState
 import com.kyc.mobile.ui.shared.DisplayState
@@ -26,8 +23,7 @@ const val SPLASH_SCREEN_TEXT = "splash_screen_text"
 const val INTRO_SCREEN_TAG = "INTRO_SCREEN"
 class IntroScreenViewModel(
     private val remoteConfig: RemoteConfigRepository,
-    private val propertyRepository: PropertiesRepository,
-    private val publicRepository: PublicRepository
+    private val publicKeyRepository: PublicKeyRepository
 ): ViewModel(){
 
     private val _splashScreenText = MutableStateFlow("")
@@ -65,18 +61,8 @@ class IntroScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
 
             try{
-
-                val existsPublicKey = propertyRepository.checkPropertyByKey(PropertyKeyEnum.KYC_GTW_PUBLIC_KEY.name)
-                if(!existsPublicKey){
-                    val publicKey = publicRepository.getPublicKey()
-                    val publicKeyProperty = LocalProperty(
-                        id = 0,
-                        propertyName = PropertyKeyEnum.KYC_GTW_PUBLIC_KEY.name,
-                        propertyValue =  publicKey
-                    )
-                    propertyRepository.insertProperty(publicKeyProperty)
-                    Log.i(INTRO_SCREEN_TAG,"SAVED $publicKeyProperty")
-                }
+                Log.i(INTRO_SCREEN_TAG, "Checking if needs update the Public Key")
+                publicKeyRepository.updatePublicKey()
                 _introScreenState.update {
                     it.copy(state = DisplayState.Success)
                 }

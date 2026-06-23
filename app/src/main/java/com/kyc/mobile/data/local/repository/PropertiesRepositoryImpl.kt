@@ -30,7 +30,7 @@ class PropertiesRepositoryImpl(
     override suspend fun updateProperty(property: LocalProperty){
 
         val resultGetPropertyId = handlingIOResult {
-            propertyDao.getPropertyById(property.id)
+            propertyDao.getPropertyById(property.id ?: 0)
         }
             .onSuccess {
                 Log.i("PropertiesRepositoryImpl", "Successfully get property id")
@@ -39,9 +39,11 @@ class PropertiesRepositoryImpl(
                 Log.e("PropertiesRepositoryImpl", "Exception", throwable)
             }
 
-        resultGetPropertyId.getOrThrow()?.let {
+        val propertyEntity = resultGetPropertyId.getOrThrow()
 
-            val updateEntity = it.copy(
+        if(propertyEntity!=null){
+
+            val updateEntity = propertyEntity.copy(
                 propertyKey = property.propertyName,
                 propertyValue = property.propertyValue,
                 updateAt = LocalDateTime.now()
@@ -51,6 +53,9 @@ class PropertiesRepositoryImpl(
                 propertyDao.updateProperty(updateEntity)
             }
                 .getOrThrow()
+        }
+        else{
+            insertProperty(property)
         }
     }
 

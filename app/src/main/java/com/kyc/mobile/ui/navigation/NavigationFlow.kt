@@ -49,6 +49,7 @@ fun NavigationFlow(){
     val customerApplicationRepository = featureModule.customerApplicationRepository
     val customerNotificationRepository = featureModule.customerNotificationRepository
     val customerBillsRepository = featureModule.customerBillsRepository
+    val publicKeyRepository = featureModule.publicKeyRepository
     
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -84,8 +85,7 @@ fun NavigationFlow(){
                 factory = viewModelFactory {
                     IntroScreenViewModel(
                         remoteConfigManager,
-                        propertyRepository,
-                        publicRepository
+                        publicKeyRepository
                     )
                 }
             )

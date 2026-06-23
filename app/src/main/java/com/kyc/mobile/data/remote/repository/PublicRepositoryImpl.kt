@@ -2,7 +2,9 @@ package com.kyc.mobile.data.remote.repository
 
 import android.util.Log
 import com.kyc.mobile.data.remote.api.PublicApi
+import com.kyc.mobile.data.remote.dto.toModel
 import com.kyc.mobile.data.remote.handlingApiResponse
+import com.kyc.mobile.domain.model.PublicKeyData
 import com.kyc.mobile.domain.usecase.PublicRepository
 
 
@@ -11,7 +13,7 @@ class PublicRepositoryImpl(
 ): PublicRepository{
 
 
-    override suspend fun getPublicKey(): String {
+    override suspend fun getPublicKey(): PublicKeyData {
 
         val result = handlingApiResponse {
             publicApi.getPublicKey()
@@ -24,6 +26,6 @@ class PublicRepositoryImpl(
             }
 
         val responseData = result.getOrThrow()
-        return responseData.data!!
+        return responseData.data?.toModel()!!
     }
 }

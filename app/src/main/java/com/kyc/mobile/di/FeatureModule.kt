@@ -1,5 +1,6 @@
 package com.kyc.mobile.di
 
+import com.kyc.mobile.data.local.repository.PublicKeyRepositoryImpl
 import com.kyc.mobile.data.remote.repository.CustomerApplicationRepositoryImpl
 import com.kyc.mobile.data.remote.repository.CustomerBillRepositoryImpl
 import com.kyc.mobile.data.remote.repository.CustomerNotificationRepositoryImpl
@@ -11,6 +12,7 @@ import com.kyc.mobile.domain.usecase.CustomerBillRepository
 import com.kyc.mobile.domain.usecase.CustomerNotificationRepository
 import com.kyc.mobile.domain.usecase.CustomerTrackActionRepository
 import com.kyc.mobile.domain.usecase.LoginRepository
+import com.kyc.mobile.domain.usecase.PublicKeyRepository
 import com.kyc.mobile.domain.usecase.PublicRepository
 
 interface FeatureModule{
@@ -21,6 +23,7 @@ interface FeatureModule{
     val customerNotificationRepository: CustomerNotificationRepository
     val customerBillsRepository: CustomerBillRepository
     val publicRepository: PublicRepository
+    val publicKeyRepository: PublicKeyRepository
 }
 
 class FeatureModuleImpl(
@@ -52,6 +55,11 @@ class FeatureModuleImpl(
 
     override val publicRepository: PublicRepository by lazy{
         PublicRepositoryImpl(networkModule.publicApi)
+    }
+
+    override val publicKeyRepository by lazy{
+        PublicKeyRepositoryImpl(dataStoreModule.propertiesRepository,
+            publicRepository,dataStoreModule.dataStoreRepository)
     }
 
 }
