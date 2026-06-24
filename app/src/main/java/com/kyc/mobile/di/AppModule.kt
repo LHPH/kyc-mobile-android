@@ -16,6 +16,7 @@ class AppModuleImpl(
     private val context: Context
 ): AppModule {
 
+    @Suppress("KotlinConstantConditions")
     override val networkModule: NetworkModule by lazy{
         if(BuildConfig.MOCK_API){
             MockNetworkModuleImpl(context)

@@ -1,5 +1,6 @@
 package com.kyc.mobile.data.remote.api
 
+import com.kyc.mobile.data.annotation.Crypt
 import com.kyc.mobile.data.annotation.TokenAuth
 import com.kyc.mobile.data.remote.dto.CustomerTrackActionReq
 import com.kyc.mobile.data.remote.dto.ResponseData
@@ -11,6 +12,7 @@ import retrofit2.http.POST
 
 interface CustomerTrackActionApi {
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @POST("/gateway/api/tracking/customers/v1/action")

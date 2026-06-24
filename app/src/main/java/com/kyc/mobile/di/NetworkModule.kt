@@ -84,6 +84,7 @@ class NetworkModuleImpl(
             .build()
     }
 
+    @Suppress("KotlinConstantConditions")
     private fun buildOkHttpClient(): OkHttpClient{
 
         val hostname = BuildConfig.HOSTNAME
@@ -107,6 +108,7 @@ class NetworkModuleImpl(
             .build()
     }
 
+    @Suppress("KotlinConstantConditions")
     private fun loggingInterceptor(): Interceptor{
 
         val loggingInterceptor = HttpLoggingInterceptor().apply {

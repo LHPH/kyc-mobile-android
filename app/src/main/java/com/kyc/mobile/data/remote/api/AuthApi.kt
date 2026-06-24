@@ -1,5 +1,6 @@
 package com.kyc.mobile.data.remote.api
 
+import com.kyc.mobile.data.annotation.Crypt
 import com.kyc.mobile.data.annotation.TokenAuth
 import com.kyc.mobile.data.remote.dto.ResponseData
 import com.kyc.mobile.data.remote.dto.SessionData
@@ -14,16 +15,19 @@ import retrofit2.http.POST
 
 interface AuthApi{
 
+    @Crypt
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @POST("/gateway/api/users/user/sign-in")
     suspend fun login(@Body req: UserCredentials): Response<ResponseData<TokenData>>
 
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @GET("/gateway/api/users/user/session-checking")
     suspend fun sessionChecking(): Response<ResponseData<SessionData>>
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @POST("/gateway/api/users/user/sign-out")

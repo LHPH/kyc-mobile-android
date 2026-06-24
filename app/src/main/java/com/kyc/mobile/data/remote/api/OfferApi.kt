@@ -1,5 +1,6 @@
 package com.kyc.mobile.data.remote.api
 
+import com.kyc.mobile.data.annotation.Crypt
 import com.kyc.mobile.data.annotation.TokenAuth
 import com.kyc.mobile.data.remote.dto.OfferDataResp
 import com.kyc.mobile.data.remote.dto.ResponseData
@@ -11,11 +12,13 @@ import retrofit2.http.Path
 
 interface OfferApi {
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @GET("/gateway/api/campaigns/customer/{customerNumber}/offers")
     suspend fun getOffers(@Path("customerNumber") customerNumber: Long): Response<ResponseData<List<OfferDataResp>>>
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @GET("/gateway/api/campaigns/customer/{customerNumber}/offers/{idOffer}")

@@ -1,5 +1,6 @@
 package com.kyc.mobile.data.remote.api
 
+import com.kyc.mobile.data.annotation.Crypt
 import com.kyc.mobile.data.annotation.TokenAuth
 import com.kyc.mobile.data.remote.dto.NotificationDataResp
 import com.kyc.mobile.data.remote.dto.ResponseData
@@ -10,6 +11,7 @@ import retrofit2.http.Headers
 
 interface NotificationsApi {
 
+    @Crypt
     @TokenAuth
     @Headers(AppConstants.HEADER_CHANNEL_MOBILE)
     @GET("/gateway/api/notifications/notifications/")
