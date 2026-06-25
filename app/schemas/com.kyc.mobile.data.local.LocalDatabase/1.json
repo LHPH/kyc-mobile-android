@@ -1,0 +1,53 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "1b84cde95fe339df100ac95977e314b3",
+    "entities": [
+      {
+        "tableName": "PROPERTIES",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `PROPERTY_KEY` TEXT NOT NULL, `PROPERTY_VALUE` TEXT, `CREATE_AT` TEXT NOT NULL, `UPDATE_AT` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "propertyKey",
+            "columnName": "PROPERTY_KEY",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "propertyValue",
+            "columnName": "PROPERTY_VALUE",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createAt",
+            "columnName": "CREATE_AT",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateAt",
+            "columnName": "UPDATE_AT",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b84cde95fe339df100ac95977e314b3')"
+    ]
+  }
+}
