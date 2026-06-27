@@ -26,6 +26,7 @@ passay = "1.6.4"
 firebase = "34.11.0"
 googleServices = "4.4.4"
 crashlytics = "3.0.6"
+appDistribution = "5.2.1"
 playServicesLocation = "21.3.0"
 room3 = "3.0.0-alpha06"
 ksp = "2.3.4"
@@ -90,3 +91,4 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics"}
 android-room3 = { id = "androidx.room3" , version.ref = "room3"}
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+firebase-app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "appDistribution" }

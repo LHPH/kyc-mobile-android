@@ -1,3 +1,4 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import com.kyc.mobile.buildsrc.AppConfig
 import com.kyc.mobile.buildsrc.readYamlConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -10,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.app.distribution)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.android.room3)
 }
@@ -54,6 +56,29 @@ android {
                     buildConfigField("String", key, "\"$value\"")
                 }
             }*/
+        }
+    }
+
+    flavorDimensions += "version"
+
+    productFlavors{
+        create("mockVersion"){
+            dimension= "version"
+            versionNameSuffix ="-mock"
+            buildConfigField("boolean", "MOCK_API","true")
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "kyc-group-testers"
+            }
+        }
+        create("actualVersion"){
+            dimension = "version"
+            isDefault = true
+            buildConfigField("boolean", "MOCK_API","false")
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "kyc-group-testers"
+            }
         }
     }
     compileOptions {
