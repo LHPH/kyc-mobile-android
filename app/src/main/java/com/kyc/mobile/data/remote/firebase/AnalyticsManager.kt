@@ -41,7 +41,7 @@ class AnalyticsManager(
 
             ex.errorData?.let {
                 crashlytics.setCustomKey("code",it.code)
-                crashlytics.setCustomKey("time", it.time)
+                crashlytics.setCustomKey("time", it.time.toString())
             }
         }
         crashlytics.setCustomKey("screen",screenName)

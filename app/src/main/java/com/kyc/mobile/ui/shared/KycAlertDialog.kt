@@ -97,5 +97,5 @@ fun KycAlertDialog(messageData: MessageData, dismissDialog: ()-> Unit){
 @Preview
 @Composable
 fun KycAlertDialogPreview(){
-    KycAlertDialog(messageData = MessageData(time= ""), dismissDialog = {})
+    KycAlertDialog(messageData = MessageData(), dismissDialog = {})
 }

@@ -16,7 +16,8 @@ constraintlayoutCompose = "1.1.1"
 lifecycleLivedataKtx = "2.9.1"
 lifecycleViewmodelKtx = "2.9.1"
 navigationCompose = "2.9.2"
-kotlinxSerialization = "1.9.0"
+kotlinxSerialization = "1.11.0"
+kotlinxSerializationDateTime = "0.8.0"
 retrofit = "2.12.0"
 okhttp3 = "5.3.1"
 datastore = "1.1.7"
@@ -59,6 +60,7 @@ androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name 
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name= "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-datetime = { group = "org.jetbrains.kotlinx", name= "kotlinx-datetime", version.ref = "kotlinxSerializationDateTime" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit"}
 retrofit-kotlin = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit"}

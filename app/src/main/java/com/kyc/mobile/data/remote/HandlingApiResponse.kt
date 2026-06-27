@@ -25,7 +25,7 @@ suspend inline fun <reified T> handlingApiResponse(
     }
     catch (ex: Exception){
 
-        val errorData = MessageData(message = "Unexpected error",time = "")
+        val errorData = MessageData(message = "Unexpected error")
         return Result.failure(KycMobileException(errorData, exception = ex))
     }
 }

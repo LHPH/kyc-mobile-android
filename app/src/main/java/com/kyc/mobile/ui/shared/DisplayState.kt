@@ -8,5 +8,5 @@ sealed class DisplayState(){
     object Success: DisplayState()
     object Loading: DisplayState()
     object Exit: DisplayState()
-    data class Error(val messageData: MessageData? = MessageData(time = "")): DisplayState()
+    data class Error(val messageData: MessageData? = MessageData()): DisplayState()
 }
