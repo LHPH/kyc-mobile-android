@@ -14,14 +14,8 @@ class DataStoreRepositoryImpl private constructor(
 
     override suspend fun saveToDataStore(data: UserPreferences) {
 
-        val record = dataStore.data.firstOrNull()
-        var token = "";
-        if(record!=null){
-            token = record.token
-        }
-
         dataStore.updateData {
-            data.copy(token = data.token.takeIf { it.isNotBlank() } ?: token)
+            data
         }
     }
 

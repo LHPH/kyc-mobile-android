@@ -98,7 +98,9 @@ class CryptInterceptor(
 
         Log.d(CRYPT_INTERCEPTOR_TAG, "Decrypting response")
         val responseBody = encryptedResponse.body
-        val encryptedData = JsonDefaults.instance.decodeFromString<EncryptedData>(responseBody.string())
+        val responseBodyStr = responseBody.string();
+        Log.d(CRYPT_INTERCEPTOR_TAG, responseBodyStr)
+        val encryptedData = JsonDefaults.instance.decodeFromString<EncryptedData>(responseBodyStr)
         val decryptedResponse = aesCipher.decrypt(encryptedData.data,secretKey)
         Log.d(CRYPT_INTERCEPTOR_TAG, "Response body after decryption: $decryptedResponse")
         return encryptedResponse.newBuilder()
