@@ -9,7 +9,6 @@ import com.kyc.mobile.domain.usecase.PublicKeyRepository
 import com.kyc.mobile.domain.usecase.PublicRepository
 import com.kyc.mobile.domain.util.PropertyKeyEnum
 import com.kyc.mobile.ui.viewmodel.INTRO_SCREEN_TAG
-import java.security.PublicKey
 import java.util.concurrent.TimeUnit
 
 class PublicKeyRepositoryImpl(
@@ -85,10 +84,4 @@ class PublicKeyRepositoryImpl(
             }
         }
     }
-
-    override suspend fun getPublicKey(): PublicKey {
-        TODO("Not yet implemented")
-    }
-
-
 }
