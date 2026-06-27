@@ -31,7 +31,7 @@ class AppModuleImpl(
     }
 
     override val dataStoreModule: DataStoreModule by lazy{
-        DataStoreModuleImpl(context)
+        DataStoreModuleImpl(context,securityModule)
     }
 
    override val firebaseModule: FirebaseModule by lazy {
@@ -43,6 +43,6 @@ class AppModuleImpl(
     }
 
     override val securityModule: SecurityModule by lazy{
-        SecurityModuleImpl()
+        SecurityModuleImpl(context)
     }
 }

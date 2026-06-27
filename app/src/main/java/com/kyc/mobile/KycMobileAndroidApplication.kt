@@ -10,10 +10,6 @@ import com.kyc.mobile.di.AppModule
 import com.kyc.mobile.di.AppModuleImpl
 import com.kyc.mobile.domain.model.UserPreferencesSerializable
 
-val Context.dataStore by dataStore(
-    fileName = "user-preferences",
-    serializer = UserPreferencesSerializable
-)
 
 class KycMobileAndroidApplication(): Application(){
 

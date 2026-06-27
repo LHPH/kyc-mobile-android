@@ -111,6 +111,7 @@ dependencies {
     implementation(libs.okhttp3.interceptor)
 	implementation(libs.datastore.preferences)
 	implementation(libs.datastore.core)
+    implementation(libs.tink.android)
 	implementation(libs.protobuf)
     implementation(libs.passay)
     implementation(platform(libs.firebase.bom))

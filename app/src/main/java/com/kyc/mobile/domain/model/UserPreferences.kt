@@ -1,6 +1,7 @@
 package com.kyc.mobile.domain.model
 
 import androidx.datastore.core.Serializer
+import com.google.crypto.tink.Aead
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
@@ -19,19 +20,21 @@ data class UserPreferences(
     val publicKeyTimestamp : Long = 0
 )
 
-object UserPreferencesSerializable: Serializer<UserPreferences>{
+class UserPreferencesSerializable(
+    val aead: Aead
+): Serializer<UserPreferences>{
 
     override val defaultValue: UserPreferences
         get() = UserPreferences()
 
     override suspend fun readFrom(input: InputStream): UserPreferences {
-        val bytes = withContext(Dispatchers.IO) {
+        val encryptedBytes = withContext(Dispatchers.IO) {
             input.use {
                 it.readBytes()
             }
         }
+        val bytes = aead.decrypt(encryptedBytes,null)
         val bytesDecoded = Base64.getDecoder().decode(bytes)
-        //Decrypted
         val json = bytesDecoded.decodeToString()
         return Json.decodeFromString(json)
     }
@@ -41,12 +44,12 @@ object UserPreferencesSerializable: Serializer<UserPreferences>{
         output: OutputStream
     ) {
         val json = Json.encodeToString(data)
-        val bytes: ByteArray = json.toByteArray(Charsets.UTF_8)
-        //Encrypt
+        val bytes: ByteArray = json.encodeToByteArray()
         val strBase64 = Base64.getEncoder().encode(bytes)
+        val encryptedBytes = aead.encrypt(strBase64, null)
         withContext(Dispatchers.IO) {
             output.use {
-                it.write(strBase64)
+                it.write(encryptedBytes)
             }
         }
     }

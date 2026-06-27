@@ -10,5 +10,7 @@ object AppConstants{
     const val BEARER_TOKEN = "Bearer"
 
     const val HEADER_SESSION_KEY= "X-Session-Key"
+
+    const val APP_AES_KEY_ALIAS = "kyc-mobile-aes-key"
 }
 

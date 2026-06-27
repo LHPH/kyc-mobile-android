@@ -25,10 +25,10 @@ class AesCipher{
         private const val IV_LENGTH_BYTE: Int = 16
     }
 
-    fun createKey(): SecretKey{
+    fun createKey(alias: String): SecretKey{
         return KeyGenerator.getInstance(ALGORITHM, "AndroidKeyStore").apply {
             init(
-                KeyGenParameterSpec.Builder("kyc-mobile-aes-key",
+                KeyGenParameterSpec.Builder(alias,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setKeySize(AES_KEY_LENGTH)
                     .setBlockModes(BLOCK_MODE)
