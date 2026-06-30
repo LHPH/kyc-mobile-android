@@ -1,8 +1,6 @@
 package com.kyc.mobile.ui.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kyc.mobile.domain.exception.KycMobileException
@@ -24,6 +22,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+const val HOME_TAG = "HOME"
 
 class HomeViewModel(
     private val loginRepository: LoginRepository,
@@ -108,13 +108,13 @@ class HomeViewModel(
                 customerTrackActionRepository.registerAction(customerAction)
 
                 loginRepository.logout()
-                Log.i("Home", "Logout")
+                Log.i(HOME_TAG, "Logout")
                 _homeState.update {
                     it.copy(state = DisplayState.Exit)
                 }
             }
             catch(ex: KycMobileException){
-                Log.i("","")
+                Log.i(HOME_TAG,"",ex)
                 _homeState.update {
                     it.copy(state = DisplayState.Error(ex.errorData!!))
                 }

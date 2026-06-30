@@ -2,6 +2,7 @@ package com.kyc.mobile.data.local
 
 import com.kyc.mobile.data.remote.dto.MessageData
 import com.kyc.mobile.domain.exception.KycMobileException
+import com.kyc.mobile.domain.util.LocalErrorEnum
 
 suspend inline fun <reified T> handlingIOResult(
     crossinline callback: suspend () -> T
@@ -12,7 +13,7 @@ suspend inline fun <reified T> handlingIOResult(
         return Result.success(result)
     }
     catch(ex: Exception){
-        val errorData = MessageData(message = "Unexpected error")
+        val errorData = LocalErrorEnum.LOCAL_DATABASE.toMessageData()
         return Result.failure(KycMobileException(errorData, exception = ex))
     }
 }

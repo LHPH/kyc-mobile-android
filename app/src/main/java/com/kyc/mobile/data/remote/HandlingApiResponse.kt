@@ -1,10 +1,10 @@
 package com.kyc.mobile.data.remote
 
-import com.kyc.mobile.data.remote.dto.MessageData
 import com.kyc.mobile.data.remote.dto.ResponseData
 import com.kyc.mobile.data.util.ApiUtil
 import com.kyc.mobile.data.util.processResponseData
 import com.kyc.mobile.domain.exception.KycMobileException
+import com.kyc.mobile.domain.util.LocalErrorEnum
 import retrofit2.Response
 
 suspend inline fun <reified T> handlingApiResponse(
@@ -25,7 +25,7 @@ suspend inline fun <reified T> handlingApiResponse(
     }
     catch (ex: Exception){
 
-        val errorData = MessageData(message = "Unexpected error")
+        val errorData = LocalErrorEnum.UNEXPECTED.toMessageData()
         return Result.failure(KycMobileException(errorData, exception = ex))
     }
 }
