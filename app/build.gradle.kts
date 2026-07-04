@@ -99,12 +99,13 @@ android {
 
     applicationVariants.configureEach {
         val variant = this
-        var finalName = ""
+        var finalName: String
 
         variant.outputs.configureEach {
             val output = this as BaseVariantOutputImpl
+            val buildType = variant.buildType.name
 
-            if("release" == variant.name){
+            if("release" == buildType){
 
                 if("actual" == variant.flavorName){
                     finalName = "kyc-mobile-android-${variant.versionName}.apk"
@@ -114,7 +115,7 @@ android {
                 }
             }
             else{
-                finalName = "kyc-mobile-android-${variant.flavorName}-${variant.name}-${variant.versionName}.apk"
+                finalName = "kyc-mobile-android-${variant.flavorName}-${buildType}-${variant.versionName}.apk"
             }
             output.outputFileName = finalName
         }
