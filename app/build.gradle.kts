@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import com.kyc.mobile.buildsrc.AppConfig
 import com.kyc.mobile.buildsrc.readYamlConfig
@@ -62,7 +63,7 @@ android {
     flavorDimensions += "version"
 
     productFlavors{
-        create("mockVersion"){
+        create("mock"){
             dimension= "version"
             versionNameSuffix ="-mock"
             buildConfigField("boolean", "MOCK_API","true")
@@ -71,7 +72,7 @@ android {
                 groups = "kyc-group-testers"
             }
         }
-        create("actualVersion"){
+        create("actual"){
             dimension = "version"
             isDefault = true
             buildConfigField("boolean", "MOCK_API","false")
@@ -93,6 +94,29 @@ android {
     packaging {
         resources{
             excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
+    }
+
+    applicationVariants.configureEach {
+        val variant = this
+        var finalName = ""
+
+        variant.outputs.configureEach {
+            val output = this as BaseVariantOutputImpl
+
+            if("release" == variant.name){
+
+                if("actual" == variant.flavorName){
+                    finalName = "kyc-mobile-android-${variant.versionName}.apk"
+                }
+                else{
+                    finalName = "kyc-mobile-android-${variant.flavorName}-${variant.versionName}.apk"
+                }
+            }
+            else{
+                finalName = "kyc-mobile-android-${variant.flavorName}-${variant.name}-${variant.versionName}.apk"
+            }
+            output.outputFileName = finalName
         }
     }
 }
