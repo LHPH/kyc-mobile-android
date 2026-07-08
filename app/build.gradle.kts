@@ -22,10 +22,13 @@ android {
     compileSdk = 35
 
     defaultConfig {
+
+        val jenkinsBuildNumber = System.getenv("JENKINS_BUILD_NUMBER")?.toIntOrNull();
+
         applicationId = "com.kyc.mobile"
         minSdk = 31
         targetSdk = 35
-        versionCode = 1
+        versionCode = jenkinsBuildNumber ?: 1
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -68,7 +71,7 @@ android {
             versionNameSuffix ="-mock"
             buildConfigField("boolean", "MOCK_API","true")
             firebaseAppDistribution {
-                artifactType = "APK"
+                //artifactType = "APK"
                 groups = "kyc-group-testers"
             }
         }
@@ -77,7 +80,7 @@ android {
             isDefault = true
             buildConfigField("boolean", "MOCK_API","false")
             firebaseAppDistribution {
-                artifactType = "APK"
+                //artifactType = "APK"
                 groups = "kyc-group-testers"
             }
         }
