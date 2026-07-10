@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.gradle.internal.tasks.FinalizeBundleTask
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import com.kyc.mobile.buildsrc.AppConfig
 import com.kyc.mobile.buildsrc.readYamlConfig
@@ -123,6 +124,32 @@ android {
             output.outputFileName = finalName
         }
     }
+    //
+    applicationVariants.configureEach {
+
+         val variant = this
+         val capitalizedVariantName = variant.name.replaceFirstChar{ it.uppercaseChar() }
+         val buildType = variant.buildType.name
+
+         tasks.named<FinalizeBundleTask>("sign${capitalizedVariantName}Bundle") {
+             val parentDir = finalBundleFile.asFile.get().parentFile
+
+            val finalName = if("release" == buildType){
+                if("actual" == variant.flavorName){
+                     "kyc-mobile-android-${variant.versionName}.aab"
+                }
+                else{
+                    "kyc-mobile-android-${variant.flavorName}-${variant.versionName}.aab"
+                }
+            }
+            else{
+                "kyc-mobile-android-${variant.flavorName}-${buildType}-${variant.versionName}.aab"
+            }
+
+            finalBundleFile.set(File(parentDir, finalName))
+         }
+    }
+
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {
