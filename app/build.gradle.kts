@@ -37,7 +37,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -112,14 +112,14 @@ android {
             if("release" == buildType){
 
                 if("actual" == variant.flavorName){
-                    finalName = "kyc-mobile-android-${variant.versionName}.apk"
+                    finalName = "${rootProject.name}-${variant.versionName}.apk"
                 }
                 else{
-                    finalName = "kyc-mobile-android-${variant.flavorName}-${variant.versionName}.apk"
+                    finalName = "${rootProject.name}-${variant.flavorName}-${variant.versionName}.apk"
                 }
             }
             else{
-                finalName = "kyc-mobile-android-${variant.flavorName}-${buildType}-${variant.versionName}.apk"
+                finalName = "${rootProject.name}-${variant.flavorName}-${buildType}-${variant.versionName}.apk"
             }
             output.outputFileName = finalName
         }
@@ -136,14 +136,14 @@ android {
 
             val finalName = if("release" == buildType){
                 if("actual" == variant.flavorName){
-                     "kyc-mobile-android-${variant.versionName}.aab"
+                     "${rootProject.name}-${variant.versionName}.aab"
                 }
                 else{
-                    "kyc-mobile-android-${variant.flavorName}-${variant.versionName}.aab"
+                    "${rootProject.name}-${variant.flavorName}-${variant.versionName}.aab"
                 }
             }
             else{
-                "kyc-mobile-android-${variant.flavorName}-${buildType}-${variant.versionName}.aab"
+                "${rootProject.name}-${variant.flavorName}-${buildType}-${variant.versionName}.aab"
             }
 
             finalBundleFile.set(File(parentDir, finalName))
