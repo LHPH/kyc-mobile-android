@@ -49,8 +49,13 @@ class BillViewModel(
             catch(ex: KycMobileException){
 
                 Log.e(BILLS_TAG, "Error in Bills",ex)
+
                 _billState.update{
-                    it.copy(state = DisplayState.Error(ex.errorData!!))
+                    val attempts = it.attempts.plus(1)
+                    it.copy(
+                        attempts = attempts,
+                        state = DisplayState.Error(ex.errorData!!)
+                    )
                 }
             }
         }
@@ -83,6 +88,9 @@ class BillViewModel(
             }
             is BillAction.OnLoad->{
                 loadData()
+            }
+            is BillAction.OnExitFatalError ->{
+                action.errorAction()
             }
         }
     }

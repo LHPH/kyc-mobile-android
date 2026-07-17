@@ -8,5 +8,6 @@ data class BillsState(
     val bills: List<CustomerBill> = emptyList(),
     val displayedBills: List<CustomerBill> = emptyList(),
     val state: DisplayState = DisplayState.Loading,
-    val expandedDropdown: Boolean = false
+    val expandedDropdown: Boolean = false,
+    val attempts: Int = 0
 )

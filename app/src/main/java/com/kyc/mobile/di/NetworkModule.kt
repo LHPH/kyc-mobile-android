@@ -36,7 +36,6 @@ class NetworkModuleImpl(
     private val securityModule: SecurityModule
 ): NetworkModule{
 
-    val contentType = "application/json".toMediaType()
     val okHttpClient: OkHttpClient by lazy {
         buildOkHttpClient()
     }
@@ -79,7 +78,7 @@ class NetworkModuleImpl(
     private fun getRetrofit(): Retrofit{
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(JsonDefaults.instance.asConverterFactory(contentType))
+            .addConverterFactory(JsonDefaults.instance.asConverterFactory(JsonDefaults.contentType))
             .client(okHttpClient)
             .build()
     }

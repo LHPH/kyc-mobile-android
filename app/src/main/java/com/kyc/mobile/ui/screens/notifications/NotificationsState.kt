@@ -5,5 +5,6 @@ import com.kyc.mobile.ui.shared.DisplayState
 
 data class NotificationsState(
     val notifications: List<CustomerNotification> = emptyList(),
-    val state: DisplayState = DisplayState.Loading
+    val state: DisplayState = DisplayState.Loading,
+    val attempts: Int = 0
 )

@@ -25,7 +25,7 @@ class NotificationsViewModel(
     private val customerNotificationRepository: CustomerNotificationRepository
 ): ViewModel(){
 
-    private val _notificationsState = MutableStateFlow<NotificationsState>(NotificationsState())
+    private val _notificationsState = MutableStateFlow(NotificationsState())
 
     val notificationsState: StateFlow<NotificationsState> = _notificationsState
         .onStart {
@@ -55,7 +55,14 @@ class NotificationsViewModel(
 
                 Log.e(NOTIFICATION_TAG, "Error in Notifications",ex)
                 _notificationsState.update{
-                    it.copy(state = DisplayState.Error(ex.errorData!!))
+
+                    val attempts = it.attempts.plus(1)
+                    it.copy(
+                        attempts = attempts,
+                        state = DisplayState.Error(
+                            messageData = ex.errorData!!
+                        )
+                    )
                 }
             }
         }
@@ -74,6 +81,9 @@ class NotificationsViewModel(
                     )
                 }
                 loadData()
+            }
+            is NotificationAction.OnExitFatalError ->{
+                action.errorAction()
             }
         }
     }

@@ -212,9 +212,10 @@ fun BillView(
             DisplayState.Exit -> {}
             is DisplayState.Error ->{
                 val error = billState.state.messageData!!
+                val action = BillAction.fromAttempts(billState.attempts,onClickBack)
                 KycAlertDialog(
                     messageData = error,
-                    dismissDialog = {onAction(BillAction.OnDismissAlertError)})
+                    dismissDialog = {onAction(action)})
             }
         }
     }
@@ -224,7 +225,7 @@ fun BillView(
 @Composable
 fun BillViewPreview(){
 
-    var customerBills = ArrayList<CustomerBill>()
+    val customerBills = ArrayList<CustomerBill>()
     val customerBill = CustomerBill(
         id = 1, taxes = 10.2, subtotal = 20.0,total = 300.0, settled = false,
         status = "PAID", issueDate = "", billingStartDate = "", billingFinishDate = "",

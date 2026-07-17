@@ -4,12 +4,14 @@ import com.kyc.mobile.data.remote.dto.ResponseData
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import okhttp3.MediaType.Companion.toMediaType
 
 object JsonDefaults{
     val instance:Json = Json{
         ignoreUnknownKeys = true
         encodeDefaults = true
     } // Configure Json instance as needed
+    val contentType = "application/json".toMediaType()
 }
 
 inline fun <reified T> Json.decodeToResponseData(json: String): ResponseData<T>{
