@@ -4,7 +4,8 @@
 		"user": 2,
 		"channel": "3",
 		"role": "CUSTOMER",
-		"sub": "ba48e728-99c2-4b41-a3ac-d97356b159a6",
+		"sid": "ba48e728-99c2-4b41-a3ac-d97356b159a6",
+        "sub": "FIRST_NAME LAST_NAME",
 		"iss": "http://localhost:9004",
 		"aud": [
 			"http://localhost:9004"

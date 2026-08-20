@@ -72,7 +72,7 @@ class LoginRepositoryImpl(
             userId = sessionData.user,
             customerId = sessionData.owner,
             role = sessionData.role,
-            name = sessionData.name!!
+            name = sessionData.sub
         ))
         return sessionData;
     }
